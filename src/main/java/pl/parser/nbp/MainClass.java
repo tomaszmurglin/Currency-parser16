@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 
 import org.apache.commons.lang3.time.StopWatch;
 
-import pl.parser.nbp.model.ExchangeRates;
+import pl.parser.nbp.model.ExchangeRateAggregate;
 import pl.parser.nbp.service.ExchangeRateCalculationService;
 import pl.parser.nbp.service.NbpClientService;
 import pl.parser.nbp.validation.UserInputValidator;
@@ -32,13 +32,15 @@ public class MainClass {
 		String startDate = args[1];
 		String endDate = args[2];
 		NbpClientService nbpClientService = new NbpClientService();
-		Set<ExchangeRates> exchangeRates = nbpClientService.loadData(currencyCode, startDate, endDate);
+		Set<ExchangeRateAggregate> exchangeRateAggregates = nbpClientService.loadData(currencyCode, startDate, endDate);
 		ExchangeRateCalculationService exchangeRateCalculationService = new ExchangeRateCalculationService();
-		BigDecimal averageExchangeRate = exchangeRateCalculationService.calculateAverageExchangeRate(exchangeRates);
-		BigDecimal standardDeviation = exchangeRateCalculationService.calculateStandardDeviation(exchangeRates);
+		BigDecimal averageBuyingRate = exchangeRateCalculationService
+				.calculateAverageBuyingRate(exchangeRateAggregates, currencyCode);
+		BigDecimal standardDeviation = exchangeRateCalculationService
+				.calculateStandardDeviation(exchangeRateAggregates, currencyCode);
 		stopWatch.stop();
 		LOGGER.log(Level.INFO, "Execution finished successfully. Elapsed time: {}", stopWatch.getTime(MILLISECONDS));
-		LOGGER.log(Level.INFO, "Calculated average exchange rate: {}", averageExchangeRate);
+		LOGGER.log(Level.INFO, "Calculated average buying rate: {}", averageBuyingRate);
 		LOGGER.log(Level.INFO, "Calculated standard deviation: {}", standardDeviation);
 	}
 }

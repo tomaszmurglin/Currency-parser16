@@ -2,7 +2,7 @@ package pl.parser.nbp.service;
 
 import java.util.Set;
 
-import pl.parser.nbp.model.ExchangeRates;
+import pl.parser.nbp.model.ExchangeRateAggregate;
 
 import com.sun.istack.internal.NotNull;
 
@@ -17,12 +17,12 @@ public class NbpClientService {
 
 	}
 
-	public Set<ExchangeRates> loadData(@NotNull String currencyCode, @NotNull String startDate,
+	public Set<ExchangeRateAggregate> loadData(@NotNull String currencyCode, @NotNull String startDate,
 			@NotNull String endDate) {
 		return parseData();
 	}
 
-	private Set<ExchangeRates> parseData() {
+	private Set<ExchangeRateAggregate> parseData() {
 		ExchangeRateParsingService exchangeRateParsingService = new ExchangeRateParsingService();
 		return exchangeRateParsingService.parse();
 	}

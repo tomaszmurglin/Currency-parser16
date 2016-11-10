@@ -8,12 +8,12 @@ import java.util.Set;
  *
  * @author tomasz.murglin@gmail.com
  */
-public class ExchangeRates implements Serializable {
+public class ExchangeRateAggregate implements Serializable {
 	private static final long serialVersionUID = -2998469714034364623L;
 
 	private Set<ExchangeRate> exchangeRates;
 
-	public ExchangeRates() {
+	public ExchangeRateAggregate() {
 
 	}
 

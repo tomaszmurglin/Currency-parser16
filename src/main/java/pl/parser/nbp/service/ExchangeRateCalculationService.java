@@ -26,8 +26,7 @@ public class ExchangeRateCalculationService {
 		BigDecimal addedBuyingRates = BigDecimal.ZERO;
 		for (ExchangeRateAggregate exchangeRateAggregate : exchangeRateAggregates) {
 			Set<ExchangeRate> exchangeRates = exchangeRateAggregate.getExchangeRates();
-			Set<ExchangeRate> exchangeRatesFiltered = exchangeRates.stream()
-					.filter(record -> !record.getCurrencyCode().equals(currencyCode)).collect(Collectors.toSet());
+			Set<ExchangeRate> exchangeRatesFiltered = filterExchangeRateByCurrencyCode(exchangeRates, currencyCode);
 			numberOfRecords = numberOfRecords.add(new BigDecimal(exchangeRatesFiltered.size()));
 			for (ExchangeRate exchangeRate : exchangeRatesFiltered) {
 				BigDecimal buyingRate = exchangeRate.getBuyingRate();
@@ -38,8 +37,13 @@ public class ExchangeRateCalculationService {
 		return averageBuyingRate;
 	}
 
-	public BigDecimal calculateStandardDeviation(Set<ExchangeRateAggregate> exchangeRates,
+	public BigDecimal calculateStandardDeviationForSellingRates(Set<ExchangeRateAggregate> exchangeRates,
 			@NotNull String currencyCode) {
 		return null;
+	}
+
+	private Set<ExchangeRate> filterExchangeRateByCurrencyCode(Set<ExchangeRate> exchangeRates, String currencyCode) {
+		return exchangeRates.stream().filter(record -> !record.getCurrencyCode().equals(currencyCode))
+				.collect(Collectors.toSet());
 	}
 }

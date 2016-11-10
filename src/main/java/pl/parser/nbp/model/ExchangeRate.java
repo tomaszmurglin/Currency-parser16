@@ -1,6 +1,7 @@
 package pl.parser.nbp.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * Represents the exchange rate xml node
@@ -10,8 +11,41 @@ import java.io.Serializable;
 public class ExchangeRate implements Serializable {
 	private static final long serialVersionUID = 8935018683817780295L;
 
-	public ExchangeRate() {
+	private String currencyName;
 
+	private int currencyConverter;
+
+	/**
+	 * In ISO 4217 format.
+	 */
+	private String currencyCode;
+
+	private BigDecimal buyingRate;
+
+	private BigDecimal sendingRate;
+
+	private ExchangeRate() {
+
+	}
+
+	public String getCurrencyName() {
+		return currencyName;
+	}
+
+	public int getCurrencyConverter() {
+		return currencyConverter;
+	}
+
+	public String getCurrencyCode() {
+		return currencyCode;
+	}
+
+	public BigDecimal getBuyingRate() {
+		return buyingRate;
+	}
+
+	public BigDecimal getSendingRate() {
+		return sendingRate;
 	}
 
 	// TODO implement hashcode, equals, tostring

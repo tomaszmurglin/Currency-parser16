@@ -1,6 +1,7 @@
 package pl.parser.nbp.model;
 
 import java.io.Serializable;
+import java.util.Set;
 
 /**
  * Represents a set of the exchange rates
@@ -10,8 +11,14 @@ import java.io.Serializable;
 public class ExchangeRates implements Serializable {
 	private static final long serialVersionUID = -2998469714034364623L;
 
+	private Set<ExchangeRate> exchangeRates;
+
 	public ExchangeRates() {
 
+	}
+
+	public Set<ExchangeRate> getExchangeRates() {
+		return exchangeRates;
 	}
 
 	// TODO implement hashcode, equals, tostring

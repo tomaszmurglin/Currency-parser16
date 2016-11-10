@@ -19,8 +19,7 @@ public class NbpClientService {
 
 	public Set<ExchangeRates> loadData(@NotNull String currencyCode, @NotNull String startDate,
 			@NotNull String endDate) {
-		parseData();
-		return null;
+		return parseData();
 	}
 
 	private Set<ExchangeRates> parseData() {

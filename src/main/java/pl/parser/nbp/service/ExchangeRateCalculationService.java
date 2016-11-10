@@ -14,10 +14,10 @@ public class ExchangeRateCalculationService {
 	}
 
 	public BigDecimal calculateExchangeRate() {
-
+		return null;
 	}
 
 	public BigDecimal calculateStandardDeviation() {
-
+		return null;
 	}
 }

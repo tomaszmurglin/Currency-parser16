@@ -20,26 +20,31 @@ public class ExchangeRateCalculationService {
 
 	}
 
-	public BigDecimal calculateAverageBuyingRate(Set<ExchangeRateAggregate> exchangeRateAggregates,
-			@NotNull String currencyCode) {
+	public BigDecimal calculateAverageRates(Set<ExchangeRateAggregate> exchangeRateAggregates,
+			@NotNull String currencyCode, boolean isBuyingRate) {
 		BigDecimal numberOfRecords = BigDecimal.ZERO;
-		BigDecimal addedBuyingRates = BigDecimal.ZERO;
+		BigDecimal addedRates = BigDecimal.ZERO;
 		for (ExchangeRateAggregate exchangeRateAggregate : exchangeRateAggregates) {
 			Set<ExchangeRate> exchangeRates = exchangeRateAggregate.getExchangeRates();
 			Set<ExchangeRate> exchangeRatesFiltered = filterExchangeRateByCurrencyCode(exchangeRates, currencyCode);
 			numberOfRecords = numberOfRecords.add(new BigDecimal(exchangeRatesFiltered.size()));
 			for (ExchangeRate exchangeRate : exchangeRatesFiltered) {
-				BigDecimal buyingRate = exchangeRate.getBuyingRate();
-				addedBuyingRates = addedBuyingRates.add(buyingRate);
+				BigDecimal rate;
+				if (isBuyingRate) {
+					rate = exchangeRate.getBuyingRate();
+				} else {
+					rate = exchangeRate.getSellingRate();
+				}
+				addedRates = addedRates.add(rate);
 			}
 		}
-		BigDecimal averageBuyingRate = addedBuyingRates.divide(numberOfRecords);
-		return averageBuyingRate;
+		BigDecimal calculatedAverageRate = addedRates.divide(numberOfRecords);
+		return calculatedAverageRate;
 	}
 
 	public BigDecimal calculateStandardDeviationForSellingRates(Set<ExchangeRateAggregate> exchangeRates,
 			@NotNull String currencyCode) {
-		return null;
+		BigDecimal averageSellingRate = calculateAverageRates(exchangeRates, currencyCode, false);
 	}
 
 	private Set<ExchangeRate> filterExchangeRateByCurrencyCode(Set<ExchangeRate> exchangeRates, String currencyCode) {

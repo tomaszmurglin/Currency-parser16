@@ -22,7 +22,7 @@ public class ExchangeRate implements Serializable {
 
 	private BigDecimal buyingRate;
 
-	private BigDecimal sendingRate;
+	private BigDecimal sellingRate;
 
 	private ExchangeRate() {
 
@@ -44,8 +44,8 @@ public class ExchangeRate implements Serializable {
 		return buyingRate;
 	}
 
-	public BigDecimal getSendingRate() {
-		return sendingRate;
+	public BigDecimal getSellingRate() {
+		return sellingRate;
 	}
 
 	// TODO implement hashcode, equals, tostring

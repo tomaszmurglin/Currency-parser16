@@ -35,7 +35,7 @@ public class MainClass {
 		Set<ExchangeRateAggregate> exchangeRateAggregates = nbpClientService.loadData(currencyCode, startDate, endDate);
 		ExchangeRateCalculationService exchangeRateCalculationService = new ExchangeRateCalculationService();
 		BigDecimal averageBuyingRate = exchangeRateCalculationService
-				.calculateAverageBuyingRate(exchangeRateAggregates, currencyCode);
+				.calculateAverageRates(exchangeRateAggregates, currencyCode, true);
 		BigDecimal standardDeviationForSellingRates = exchangeRateCalculationService
 				.calculateStandardDeviationForSellingRates(exchangeRateAggregates, currencyCode);
 		stopWatch.stop();

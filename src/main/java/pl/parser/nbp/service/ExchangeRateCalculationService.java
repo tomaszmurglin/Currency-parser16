@@ -1,6 +1,9 @@
 package pl.parser.nbp.service;
 
 import java.math.BigDecimal;
+import java.util.Set;
+
+import pl.parser.nbp.model.ExchangeRates;
 
 /**
  * Service responsible for calculations of the average exchange rate and standard deviation of it.
@@ -13,11 +16,11 @@ public class ExchangeRateCalculationService {
 
 	}
 
-	public BigDecimal calculateExchangeRate() {
+	public BigDecimal calculateAverageExchangeRate(Set<ExchangeRates> exchangeRates) {
 		return null;
 	}
 
-	public BigDecimal calculateStandardDeviation() {
+	public BigDecimal calculateStandardDeviation(Set<ExchangeRates> exchangeRates) {
 		return null;
 	}
 }

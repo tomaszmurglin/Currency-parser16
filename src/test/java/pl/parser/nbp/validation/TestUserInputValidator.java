@@ -6,6 +6,11 @@ import pl.parser.nbp.exception.UserInputValidationException;
 
 import static org.junit.Assert.assertTrue;
 
+/**
+ * JUnit test case for UserInputValidator.
+ *
+ * @author tomasz.murglin@gmail.com
+ */
 public class TestUserInputValidator {
 
 	private UserInputValidator testee = new UserInputValidator();

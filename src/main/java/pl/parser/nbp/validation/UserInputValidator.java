@@ -23,7 +23,7 @@ public class UserInputValidator {
 	private static final int NUMBER_OF_MANDATORY_INPUT_ARGS = 3;
 	private static final int LENGTH_OF_CURRENCY_CODE_BY_ISO_4217 = 3;
 	private static final String ERROR_MSG = "Not valid input has been provided. ";
-	private static final String VALID_MSG = "User input is valid";
+	private static final String VALID_MSG = "User input is valid. Currency code: {}, Start date: {}, End date: {}.";
 	private static final String CORRECT_INPUT_MSG = "Please make sure your input is correct and try again. Correct "
 			+ "input is: [currency_code in ISO_4217 format] [start_date yyyy-MM-dd] [end_date yyyy-MM-dd] e.g. EUR 2013-01-28 "
 			+ "2013-01-31";
@@ -48,7 +48,7 @@ public class UserInputValidator {
 			LOGGER.log(Level.SEVERE, ERROR_MSG + CORRECT_INPUT_MSG);
 			throw new UserInputValidationException(ERROR_MSG + CORRECT_INPUT_MSG);
 		}
-		LOGGER.log(Level.INFO, VALID_MSG);
+		LOGGER.log(Level.INFO, VALID_MSG, args);
 		return true;
 	}
 

@@ -32,7 +32,7 @@ public class MainClass {
 		String startDate = args[1];
 		String endDate = args[2];
 		NbpClientService nbpClientService = new NbpClientService();
-		Set<ExchangeRateAggregate> exchangeRateAggregates = nbpClientService.loadData(currencyCode, startDate, endDate);
+		Set<ExchangeRateAggregate> exchangeRateAggregates = nbpClientService.loadData(startDate, endDate);
 		ExchangeRateCalculationService exchangeRateCalculationService = new ExchangeRateCalculationService();
 		BigDecimal averageBuyingRate = exchangeRateCalculationService
 				.calculateAverageRates(exchangeRateAggregates, currencyCode, true);

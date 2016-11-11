@@ -42,9 +42,24 @@ public class ExchangeRateCalculationService {
 		return calculatedAverageRate;
 	}
 
-	public BigDecimal calculateStandardDeviationForSellingRates(Set<ExchangeRateAggregate> exchangeRates,
+	public Double calculateStandardDeviationForSellingRates(Set<ExchangeRateAggregate> exchangeRateAggregates,
 			@NotNull String currencyCode) {
-		BigDecimal averageSellingRate = calculateAverageRates(exchangeRates, currencyCode, false);
+		BigDecimal averageSellingRate = calculateAverageRates(exchangeRateAggregates, currencyCode, false);
+		BigDecimal numberOfRecords = BigDecimal.ZERO;
+		BigDecimal numerator = BigDecimal.ZERO;
+		for (ExchangeRateAggregate exchangeRateAggregate : exchangeRateAggregates) {
+			Set<ExchangeRate> exchangeRates = exchangeRateAggregate.getExchangeRates();
+			Set<ExchangeRate> exchangeRatesFiltered = filterExchangeRateByCurrencyCode(exchangeRates, currencyCode);
+			numberOfRecords = numberOfRecords.add(new BigDecimal(exchangeRatesFiltered.size()));
+			for (ExchangeRate exchangeRate : exchangeRatesFiltered) {
+				BigDecimal sellingRate = exchangeRate.getSellingRate();
+				BigDecimal sellingRateSubstracedByAverage = sellingRate.subtract(averageSellingRate);
+				numerator = numerator.add((sellingRateSubstracedByAverage.pow(2)));
+			}
+		}
+		BigDecimal fraction = numerator.divide(numberOfRecords.subtract(BigDecimal.ONE));
+		Double result = fraction.pow(0.5);
+		return result;
 	}
 
 	private Set<ExchangeRate> filterExchangeRateByCurrencyCode(Set<ExchangeRate> exchangeRates, String currencyCode) {

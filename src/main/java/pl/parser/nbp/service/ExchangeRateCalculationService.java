@@ -4,10 +4,10 @@ import java.math.BigDecimal;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.annotation.Nonnull;
+
 import pl.parser.nbp.model.ExchangeRate;
 import pl.parser.nbp.model.ExchangeRateAggregate;
-
-import com.sun.istack.internal.NotNull;
 
 /**
  * Service responsible for calculations of the average exchange rate and standard deviation of it.
@@ -21,7 +21,7 @@ public class ExchangeRateCalculationService {
 	}
 
 	public BigDecimal calculateAverageRates(Set<ExchangeRateAggregate> exchangeRateAggregates,
-			@NotNull String currencyCode, boolean isBuyingRate) {
+			@Nonnull String currencyCode, boolean isBuyingRate) {
 		BigDecimal numberOfRecords = BigDecimal.ZERO;
 		BigDecimal addedRates = BigDecimal.ZERO;
 		for (ExchangeRateAggregate exchangeRateAggregate : exchangeRateAggregates) {
@@ -43,7 +43,7 @@ public class ExchangeRateCalculationService {
 	}
 
 	public BigDecimal calculateStandardDeviationForSellingRates(Set<ExchangeRateAggregate> exchangeRateAggregates,
-			@NotNull String currencyCode) {
+			@Nonnull String currencyCode) {
 		BigDecimal averageSellingRate = calculateAverageRates(exchangeRateAggregates, currencyCode, false);
 		BigDecimal numberOfRecords = BigDecimal.ZERO;
 		BigDecimal numerator = BigDecimal.ZERO;

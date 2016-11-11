@@ -8,11 +8,11 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import pl.parser.nbp.exception.UserInputValidationException;
 import pl.parser.nbp.model.CurrencyCode;
-
-import com.sun.istack.internal.NotNull;
-import com.sun.istack.internal.Nullable;
 
 /**
  * Validator for the user input
@@ -44,7 +44,7 @@ public class UserInputValidator {
 	 * @throws UserInputValidationException
 	 * 		if is fails.
 	 */
-	public boolean validate(@NotNull String[] args) throws UserInputValidationException {
+	public boolean validate(@Nonnull String[] args) throws UserInputValidationException {
 		boolean isUserInputNotValid =
 				isInputLengthNotValid(args) || isCurrencyCodeNotValid(args[0]) || areDatesNotValid(args[1], args[2]);
 		if (isUserInputNotValid) {

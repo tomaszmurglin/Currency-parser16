@@ -87,4 +87,13 @@ public class TestUserInputValidator {
 		//THEN
 		assertTrue(result);
 	}
+
+	@Test(expected = UserInputValidationException.class)
+	public void testValidateForNotPermittedCurrencyCode() {
+		//GIVEN
+		String[] args = { "JAP", "1991-12-01", "1998-12-01" };
+		//WHEN
+		testee.validate(args);
+		//THEN UserInputValidationException should be thrown
+	}
 }

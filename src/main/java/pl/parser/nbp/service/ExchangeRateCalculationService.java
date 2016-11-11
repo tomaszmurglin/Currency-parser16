@@ -42,7 +42,7 @@ public class ExchangeRateCalculationService {
 		return calculatedAverageRate;
 	}
 
-	public Double calculateStandardDeviationForSellingRates(Set<ExchangeRateAggregate> exchangeRateAggregates,
+	public BigDecimal calculateStandardDeviationForSellingRates(Set<ExchangeRateAggregate> exchangeRateAggregates,
 			@NotNull String currencyCode) {
 		BigDecimal averageSellingRate = calculateAverageRates(exchangeRateAggregates, currencyCode, false);
 		BigDecimal numberOfRecords = BigDecimal.ZERO;
@@ -58,8 +58,9 @@ public class ExchangeRateCalculationService {
 			}
 		}
 		BigDecimal fraction = numerator.divide(numberOfRecords.subtract(BigDecimal.ONE));
-		Double result = fraction.pow(0.5);
-		return result;
+		//		Double result = fraction.pow(0.5);
+		//		return result;
+		return null;
 	}
 
 	private Set<ExchangeRate> filterExchangeRateByCurrencyCode(Set<ExchangeRate> exchangeRates, String currencyCode) {

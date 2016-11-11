@@ -11,4 +11,4 @@ author: tomasz.murglin@gmail.com
 * mvn test*
 **
 *Build jar:*
-* mvn *
+* mvn package *

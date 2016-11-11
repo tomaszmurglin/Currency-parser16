@@ -2,11 +2,14 @@ package pl.parser.nbp.validation;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import pl.parser.nbp.exception.UserInputValidationException;
+import pl.parser.nbp.model.CurrencyCode;
 
 import com.sun.istack.internal.NotNull;
 import com.sun.istack.internal.Nullable;
@@ -75,7 +78,12 @@ public class UserInputValidator {
 	}
 
 	private boolean isCurrencyCodeNotValid(@Nullable String currencyCode) {
-		if (currencyCode == null || currencyCode.length() != LENGTH_OF_CURRENCY_CODE_BY_ISO_4217) {
+		List<String> currencyCodes = new ArrayList<>();
+		for (CurrencyCode element : CurrencyCode.values()) {
+			currencyCodes.add(element.toString().toLowerCase());
+		}
+		if (currencyCode == null || currencyCode.length() != LENGTH_OF_CURRENCY_CODE_BY_ISO_4217 || !currencyCodes
+				.contains(currencyCode.toLowerCase())) {
 			return true;
 		}
 		return false;

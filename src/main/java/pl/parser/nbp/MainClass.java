@@ -39,7 +39,8 @@ public class MainClass {
 		BigDecimal standardDeviationForSellingRates = exchangeRateCalculationService
 				.calculateStandardDeviationForSellingRates(exchangeRateAggregates, currencyCode);
 		stopWatch.stop();
-		LOGGER.log(Level.INFO, "Execution finished successfully. Elapsed time: {}", stopWatch.getTime(MILLISECONDS));
+		LOGGER.log(Level.INFO, "Execution finished successfully. Elapsed time: {}",
+				stopWatch.getTime(MILLISECONDS));
 		LOGGER.log(Level.INFO, "Calculated average buying rate: {}", averageBuyingRate);
 		LOGGER.log(Level.INFO, "Calculated standard deviation: {}", standardDeviationForSellingRates);
 	}

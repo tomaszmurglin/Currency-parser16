@@ -3,26 +3,43 @@ package pl.parser.nbp.model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * Represents the exchange rate xml node
  *
  * @author tomasz.murglin@gmail.com
  */
+@XmlRootElement(name = "pozycja" )
 public class ExchangeRate implements Serializable {
 	private static final long serialVersionUID = 8935018683817780295L;
 
+	@XmlElement(name = "nazwa_waluty")
 	private String currencyName;
 
+	@XmlElement(name = "przelicznik")
 	private int currencyConverter;
 
 	/**
 	 * In ISO 4217 format.
 	 */
+	@XmlElement(name = "kod_waluty")
 	private String currencyCode;
 
-	private BigDecimal buyingRate;
+	@XmlElement(name = "kurs_kupna")
+	private String buyingRate;
 
-	private BigDecimal sellingRate;
+	public String getBuyingRate() {
+		return buyingRate;
+	}
+
+	public String getSellingRate() {
+		return sellingRate;
+	}
+
+	@XmlElement(name = "kurs_sprzedazy")
+	private String sellingRate;
 
 	private ExchangeRate() {
 
@@ -40,13 +57,41 @@ public class ExchangeRate implements Serializable {
 		return currencyCode;
 	}
 
-	public BigDecimal getBuyingRate() {
-		return buyingRate;
+	@Override
+	public String toString() {
+		return "ExchangeRate{" + "currencyName='" + currencyName + '\'' + ", currencyConverter=" + currencyConverter
+				+ ", currencyCode='" + currencyCode + '\'' + ", buyingRate=" + buyingRate + ", sellingRate="
+				+ sellingRate + '}';
 	}
 
-	public BigDecimal getSellingRate() {
-		return sellingRate;
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+
+		ExchangeRate that = (ExchangeRate) o;
+
+		if (currencyConverter != that.currencyConverter)
+			return false;
+		if (currencyName != null ? !currencyName.equals(that.currencyName) : that.currencyName != null)
+			return false;
+		if (currencyCode != null ? !currencyCode.equals(that.currencyCode) : that.currencyCode != null)
+			return false;
+		if (buyingRate != null ? !buyingRate.equals(that.buyingRate) : that.buyingRate != null)
+			return false;
+		return sellingRate != null ? sellingRate.equals(that.sellingRate) : that.sellingRate == null;
+
 	}
 
-	// TODO implement hashcode, equals, tostring
+	@Override
+	public int hashCode() {
+		int result = currencyName != null ? currencyName.hashCode() : 0;
+		result = 31 * result + currencyConverter;
+		result = 31 * result + (currencyCode != null ? currencyCode.hashCode() : 0);
+		result = 31 * result + (buyingRate != null ? buyingRate.hashCode() : 0);
+		result = 31 * result + (sellingRate != null ? sellingRate.hashCode() : 0);
+		return result;
+	}
 }

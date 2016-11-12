@@ -25,9 +25,7 @@ public class MainClass {
 		LOGGER.log(Level.INFO, "Execution started successfully");
 
 		//TODO delete below mock
-		args[0] = "EUR";
-		args[1] = "2004-03-01";
-		args[2] = "2012-04-01";
+		args = new String[] {"EUR", "2004-03-01", "2012-04-01"};
 
 		StopWatch stopWatch = StopWatch.createStarted();
 		UserInputValidator userInputValidator = new UserInputValidator();
@@ -38,8 +36,8 @@ public class MainClass {
 		NbpClientService nbpClientService = new NbpClientService();
 		nbpClientService.loadData(startDate, endDate);
 		ExchangeRateCalculationService exchangeRateCalculationService = new ExchangeRateCalculationService();
-		BigDecimal averageBuyingRate = exchangeRateCalculationService.calculateAverageRates(currencyCode, true);
-		BigDecimal standardDeviationForSellingRates = exchangeRateCalculationService
+		double averageBuyingRate = exchangeRateCalculationService.calculateAverageRates(currencyCode, true);
+		double standardDeviationForSellingRates = exchangeRateCalculationService
 				.calculateStandardDeviationForSellingRates(currencyCode);
 		stopWatch.stop();
 		LOGGER.log(Level.INFO, "Execution finished successfully. Elapsed time: {}", stopWatch.getTime(MILLISECONDS));

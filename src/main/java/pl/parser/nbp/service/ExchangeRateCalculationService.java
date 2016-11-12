@@ -1,6 +1,5 @@
 package pl.parser.nbp.service;
 
-import java.math.BigDecimal;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -20,47 +19,46 @@ public class ExchangeRateCalculationService {
 
 	}
 
-	public BigDecimal calculateAverageRates(@Nonnull String currencyCode, boolean isBuyingRate) {
+	public double calculateAverageRates(@Nonnull String currencyCode, boolean isBuyingRate) {
 		Set<ExchangeRateAggregate> exchangeRateAggregates = ExchangeRatesCacheService.getINSTANCE().getAllCache();
-		BigDecimal numberOfRecords = BigDecimal.ZERO;
-		BigDecimal addedRates = BigDecimal.ZERO;
+		int numberOfRecords = 0;
+		double addedRates = 0;
 		for (ExchangeRateAggregate exchangeRateAggregate : exchangeRateAggregates) {
 			Set<ExchangeRate> exchangeRates = exchangeRateAggregate.getExchangeRates();
 			Set<ExchangeRate> exchangeRatesFiltered = filterExchangeRateByCurrencyCode(exchangeRates, currencyCode);
-			numberOfRecords = numberOfRecords.add(new BigDecimal(exchangeRatesFiltered.size()));
+			numberOfRecords = numberOfRecords + exchangeRatesFiltered.size();
 			for (ExchangeRate exchangeRate : exchangeRatesFiltered) {
-				BigDecimal rate;
+				double rate;
 				if (isBuyingRate) {
-					rate = exchangeRate.getBuyingRate();
+					rate = Double.parseDouble(exchangeRate.getBuyingRate());
 				} else {
-					rate = exchangeRate.getSellingRate();
+					rate = Double.parseDouble(exchangeRate.getSellingRate());
 				}
-				addedRates = addedRates.add(rate);
+				addedRates = addedRates + rate;
 			}
 		}
-		BigDecimal calculatedAverageRate = addedRates.divide(numberOfRecords);
+		double calculatedAverageRate = addedRates / numberOfRecords;
 		return calculatedAverageRate;
 	}
 
-	public BigDecimal calculateStandardDeviationForSellingRates(@Nonnull String currencyCode) {
+	public double calculateStandardDeviationForSellingRates(@Nonnull String currencyCode) {
 		Set<ExchangeRateAggregate> exchangeRateAggregates = ExchangeRatesCacheService.getINSTANCE().getAllCache();
-		BigDecimal averageSellingRate = calculateAverageRates(currencyCode, false);
-		BigDecimal numberOfRecords = BigDecimal.ZERO;
-		BigDecimal numerator = BigDecimal.ZERO;
+		double averageSellingRate = calculateAverageRates(currencyCode, false);
+		double numberOfRecords = 0;
+		double numerator = 0;
 		for (ExchangeRateAggregate exchangeRateAggregate : exchangeRateAggregates) {
 			Set<ExchangeRate> exchangeRates = exchangeRateAggregate.getExchangeRates();
 			Set<ExchangeRate> exchangeRatesFiltered = filterExchangeRateByCurrencyCode(exchangeRates, currencyCode);
-			numberOfRecords = numberOfRecords.add(new BigDecimal(exchangeRatesFiltered.size()));
+			numberOfRecords = numberOfRecords + exchangeRatesFiltered.size();
 			for (ExchangeRate exchangeRate : exchangeRatesFiltered) {
-				BigDecimal sellingRate = exchangeRate.getSellingRate();
-				BigDecimal sellingRateSubstracedByAverage = sellingRate.subtract(averageSellingRate);
-				numerator = numerator.add((sellingRateSubstracedByAverage.pow(2)));
+				double sellingRate = Double.parseDouble(exchangeRate.getSellingRate());
+				double sellingRateSubstracedByAverage = sellingRate - averageSellingRate;
+				numerator = numerator + Math.pow(sellingRateSubstracedByAverage, 2.0);
 			}
 		}
-		BigDecimal fraction = numerator.divide(numberOfRecords.subtract(BigDecimal.ONE));
-		//		Double result = fraction.pow(0.5);
-		//		return result;
-		return null;
+		double fraction = numerator / (numberOfRecords - 1);
+		Double result = Math.pow(fraction, 0.5);
+		return result;
 	}
 
 	private Set<ExchangeRate> filterExchangeRateByCurrencyCode(Set<ExchangeRate> exchangeRates, String currencyCode) {

@@ -41,7 +41,7 @@ public class NbpClientService {
 				parseAndSaveExchangeRatesAggregates(stringUrl);
 			}
 		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, ERROR_MSG);
+			LOGGER.log(Level.SEVERE, ERROR_MSG + e);
 			throw new DataLoadingException(e);
 		}
 	}
@@ -59,7 +59,7 @@ public class NbpClientService {
 			ExchangeRateAggregate exchangeRateAggregate = (ExchangeRateAggregate) um.unmarshal(xmlSource);
 			ExchangeRatesCacheService.getINSTANCE().addToCache(exchangeRateAggregate);
 		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, ERROR_MSG);
+			LOGGER.log(Level.SEVERE, ERROR_MSG + e);
 		}
 	}
 }

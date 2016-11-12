@@ -1,5 +1,6 @@
 package pl.parser.nbp.service;
 
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
@@ -27,6 +28,8 @@ public class ExchangeRateCalculationService {
 	 */
 	private final NumberFormat format = NumberFormat.getInstance(Locale.FRANCE);
 
+	DecimalFormat df = new DecimalFormat("#.####");
+
 	public ExchangeRateCalculationService() {
 
 	}
@@ -36,7 +39,7 @@ public class ExchangeRateCalculationService {
 			calculateAverageRates(currencyCode, true);
 			calculateStandardDeviationForSellingRates(currencyCode);
 		} catch (ParseException e) {
-			LOGGER.log(Level.SEVERE, "Could not calculate needed values.");
+			LOGGER.log(Level.SEVERE, "Could not calculate needed values." + e);
 			throw new CalculationException(e);
 		}
 	}
@@ -63,6 +66,7 @@ public class ExchangeRateCalculationService {
 			}
 		}
 		double calculatedAverageRate = addedRates / numberOfRecords;
+		df.format(calculatedAverageRate);
 		LOGGER.log(Level.INFO, "Calculated average buying rate: " + calculatedAverageRate);
 		return calculatedAverageRate;
 	}
@@ -85,7 +89,8 @@ public class ExchangeRateCalculationService {
 			}
 		}
 		double fraction = numerator / (numberOfRecords - 1);
-		Double standardDeviationForSellingRates = Math.pow(fraction, 0.5);
+		double standardDeviationForSellingRates = Math.pow(fraction, 0.5);
+		df.format(standardDeviationForSellingRates);
 		LOGGER.log(Level.INFO, "Calculated standard deviation: " + standardDeviationForSellingRates);
 		return standardDeviationForSellingRates;
 	}

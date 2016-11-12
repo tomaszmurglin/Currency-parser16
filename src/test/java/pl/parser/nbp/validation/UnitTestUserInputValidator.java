@@ -11,7 +11,7 @@ import static org.junit.Assert.assertTrue;
  *
  * @author tomasz.murglin@gmail.com
  */
-public class TestUserInputValidator {
+public class UnitTestUserInputValidator {
 
 	private UserInputValidator testee = new UserInputValidator();
 

@@ -60,7 +60,7 @@ public class UrlBuilderService {
 				urls.add(PROTOCOL + HOST + CATALOG + filteredResourceName + FILE_EXTENSION);
 			}
 		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, ERROR_MSG);
+			LOGGER.log(Level.SEVERE, ERROR_MSG + e);
 			throw new DataLoadingException(e);
 		}
 		return urls;
@@ -113,6 +113,7 @@ public class UrlBuilderService {
 					iterator.remove();
 				}
 			} catch (IllegalStateException e) {
+				LOGGER.log(Level.SEVERE, ERROR_MSG + e);
 				continue;
 			}
 		}
@@ -142,7 +143,7 @@ public class UrlBuilderService {
 			URL url = new URL(PROTOCOL + HOST + CATALOG + RESOURCE_ADRESSES + RESOURCE_EXTENSION);
 			loadResourcesNamesAsStrings(url, recourcesNames, in);
 		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, ERROR_MSG);
+			LOGGER.log(Level.SEVERE, ERROR_MSG + e);
 			throw new DataLoadingException(e);
 		} finally {
 			if (in != null) {

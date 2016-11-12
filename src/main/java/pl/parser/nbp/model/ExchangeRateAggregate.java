@@ -3,6 +3,8 @@ package pl.parser.nbp.model;
 import java.io.Serializable;
 import java.util.Set;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -12,6 +14,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author tomasz.murglin@gmail.com
  */
 @XmlRootElement(name = "tabela_kursow")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class ExchangeRateAggregate implements Serializable {
 	private static final long serialVersionUID = -2998469714034364623L;
 
@@ -47,5 +50,9 @@ public class ExchangeRateAggregate implements Serializable {
 	@Override
 	public int hashCode() {
 		return exchangeRates != null ? exchangeRates.hashCode() : 0;
+	}
+
+	public void setExchangeRates(Set<ExchangeRate> exchangeRates) {
+		this.exchangeRates = exchangeRates;
 	}
 }

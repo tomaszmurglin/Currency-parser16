@@ -3,6 +3,8 @@ package pl.parser.nbp.model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -12,6 +14,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author tomasz.murglin@gmail.com
  */
 @XmlRootElement(name = "pozycja" )
+@XmlAccessorType(XmlAccessType.FIELD)
 public class ExchangeRate implements Serializable {
 	private static final long serialVersionUID = 8935018683817780295L;
 
@@ -41,7 +44,7 @@ public class ExchangeRate implements Serializable {
 	@XmlElement(name = "kurs_sprzedazy")
 	private String sellingRate;
 
-	private ExchangeRate() {
+	public ExchangeRate() {
 
 	}
 
@@ -93,5 +96,25 @@ public class ExchangeRate implements Serializable {
 		result = 31 * result + (buyingRate != null ? buyingRate.hashCode() : 0);
 		result = 31 * result + (sellingRate != null ? sellingRate.hashCode() : 0);
 		return result;
+	}
+
+	public void setCurrencyName(String currencyName) {
+		this.currencyName = currencyName;
+	}
+
+	public void setCurrencyConverter(int currencyConverter) {
+		this.currencyConverter = currencyConverter;
+	}
+
+	public void setCurrencyCode(String currencyCode) {
+		this.currencyCode = currencyCode;
+	}
+
+	public void setBuyingRate(String buyingRate) {
+		this.buyingRate = buyingRate;
+	}
+
+	public void setSellingRate(String sellingRate) {
+		this.sellingRate = sellingRate;
 	}
 }

@@ -57,7 +57,7 @@ public class NbpClientService {
 			JAXBContext jc = JAXBContext.newInstance(ExchangeRateAggregate.class);
 			Unmarshaller um = jc.createUnmarshaller();
 			ExchangeRateAggregate exchangeRateAggregate = (ExchangeRateAggregate) um.unmarshal(xmlSource);
-			ExchangeRatesCacheService.getINSTANCE().addToCache(exchangeRateAggregate);
+			ExchangeRatesCacheService.getInstance().addToCache(exchangeRateAggregate);
 		} catch (Exception e) {
 			LOGGER.log(Level.SEVERE, ERROR_MSG + e);
 		}

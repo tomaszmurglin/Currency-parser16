@@ -2,11 +2,12 @@ package pl.parser.nbp.validation;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -40,11 +41,10 @@ public class UserInputValidator {
 	 *
 	 * @param args
 	 * 		command line arguments inputted by the user.
-	 * @return true if the user input is valid.
 	 * @throws UserInputValidationException
 	 * 		if is fails.
 	 */
-	public boolean validate(@Nonnull String[] args) throws UserInputValidationException {
+	public void validate(@Nonnull String[] args) throws UserInputValidationException {
 		boolean isUserInputNotValid =
 				isInputLengthNotValid(args) || isCurrencyCodeNotValid(args[0]) || areDatesNotValid(args[1], args[2]);
 		if (isUserInputNotValid) {
@@ -52,7 +52,6 @@ public class UserInputValidator {
 			throw new UserInputValidationException(ERROR_MSG + CORRECT_INPUT_MSG);
 		}
 		LOGGER.log(Level.INFO, VALID_MSG + args[0] + ", " + args[1] + ", " + args[2]);
-		return true;
 	}
 
 	private boolean areDatesNotValid(@Nullable String startDate, @Nullable String endDate) {
@@ -78,10 +77,8 @@ public class UserInputValidator {
 	}
 
 	private boolean isCurrencyCodeNotValid(@Nullable String currencyCode) {
-		List<String> currencyCodes = new ArrayList<>();
-		for (PermittedCurrencyCode permittedCurrencyCode : PermittedCurrencyCode.values()) {
-			currencyCodes.add(permittedCurrencyCode.toString().toLowerCase());
-		}
+		Set<String> currencyCodes = Arrays.stream(PermittedCurrencyCode.values()).map(o -> o.toString().toLowerCase())
+				.collect(Collectors.toSet());
 		if (currencyCode == null || currencyCode.length() != LENGTH_OF_CURRENCY_CODE_BY_ISO_4217 || !currencyCodes
 				.contains(currencyCode.toLowerCase())) {
 			return true;

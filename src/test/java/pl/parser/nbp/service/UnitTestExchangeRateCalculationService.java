@@ -63,6 +63,6 @@ public class UnitTestExchangeRateCalculationService {
 		exchangeRates.add(exchangeRate3);
 		exchangeRateAggregate.setExchangeRates(exchangeRates);
 
-		ExchangeRatesCacheService.getINSTANCE().addToCache(exchangeRateAggregate);
+		ExchangeRatesCacheService.getInstance().addToCache(exchangeRateAggregate);
 	}
 }

@@ -45,7 +45,7 @@ public class ExchangeRateCalculationService {
 	}
 
 	public double calculateAverageRates(@Nonnull String currencyCode, boolean isBuyingRate) throws ParseException {
-		Set<ExchangeRateAggregate> exchangeRateAggregates = ExchangeRatesCacheService.getINSTANCE().getAllCache();
+		Set<ExchangeRateAggregate> exchangeRateAggregates = ExchangeRatesCacheService.getInstance().getAllCache();
 		int numberOfRecords = 0;
 		double addedRates = 0;
 		for (ExchangeRateAggregate exchangeRateAggregate : exchangeRateAggregates) {
@@ -71,7 +71,7 @@ public class ExchangeRateCalculationService {
 	}
 
 	public double calculateStandardDeviationForSellingRates(@Nonnull String currencyCode) throws ParseException {
-		Set<ExchangeRateAggregate> exchangeRateAggregates = ExchangeRatesCacheService.getINSTANCE().getAllCache();
+		Set<ExchangeRateAggregate> exchangeRateAggregates = ExchangeRatesCacheService.getInstance().getAllCache();
 		double averageSellingRate = calculateAverageRates(currencyCode, false);
 		double numberOfRecords = 0;
 		double numerator = 0;
@@ -83,8 +83,8 @@ public class ExchangeRateCalculationService {
 			for (ExchangeRate exchangeRate : exchangeRatesFiltered) {
 				number = format.parse(exchangeRate.getSellingRate());
 				double sellingRate = number.doubleValue();
-				double sellingRateSubstracedByAverage = sellingRate - averageSellingRate;
-				numerator = numerator + Math.pow(sellingRateSubstracedByAverage, 2.0);
+				double sellingRateSubtractedFromAverage = sellingRate - averageSellingRate;
+				numerator = numerator + Math.pow(sellingRateSubtractedFromAverage, 2.0);
 			}
 		}
 		double fraction = numerator / (numberOfRecords - 1);

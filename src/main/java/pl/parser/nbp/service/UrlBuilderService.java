@@ -114,7 +114,6 @@ public class UrlBuilderService {
 				}
 			} catch (IllegalStateException e) {
 				LOGGER.log(Level.SEVERE, ERROR_MSG + e);
-				continue;
 			}
 		}
 		return resourcesNames;
@@ -122,7 +121,6 @@ public class UrlBuilderService {
 
 	private List<String> loadResourcesNames(LocalDate localStartDate, LocalDate localEndDate, LocalDate today)
 			throws IOException {
-		InputStream in = null;
 		List<String> recourcesNames = new ArrayList<>();
 		try {
 			int startYear = localStartDate.getYear();
@@ -134,33 +132,30 @@ public class UrlBuilderService {
 						int countedYear = startYear + i;
 						URL url = new URL(
 								PROTOCOL + HOST + CATALOG + RESOURCE_ADRESSES + countedYear + RESOURCE_EXTENSION);
-						loadResourcesNamesAsStrings(url, recourcesNames, in);
+						loadResourcesNamesAsStrings(url, recourcesNames);
 					}
 					return recourcesNames;
 				}
 				RESOURCE_ADRESSES = RESOURCE_ADRESSES + startYear;
 			}
 			URL url = new URL(PROTOCOL + HOST + CATALOG + RESOURCE_ADRESSES + RESOURCE_EXTENSION);
-			loadResourcesNamesAsStrings(url, recourcesNames, in);
+			loadResourcesNamesAsStrings(url, recourcesNames);
 		} catch (Exception e) {
 			LOGGER.log(Level.SEVERE, ERROR_MSG + e);
 			throw new DataLoadingException(e);
-		} finally {
-			if (in != null) {
-				in.close();
-			}
 		}
 		return recourcesNames;
 	}
 
-	private void loadResourcesNamesAsStrings(URL url, List<String> recourcesNames, InputStream in) throws IOException {
+	private void loadResourcesNamesAsStrings(URL url, List<String> recourcesNames) throws IOException {
 		URLConnection con = url.openConnection();
-		in = con.getInputStream();
+		InputStream in = con.getInputStream();
 		String encoding = con.getContentEncoding();
 		encoding = encoding == null ? "UTF-8" : encoding;
 		String body = IOUtils.toString(in, encoding);
 		String[] result = body.split("[\r\n]");
 		recourcesNames.addAll(Arrays.asList(result));
 		recourcesNames.removeAll(Collections.singleton(""));
+		in.close();
 	}
 }

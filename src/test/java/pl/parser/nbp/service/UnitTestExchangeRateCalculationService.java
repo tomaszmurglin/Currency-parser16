@@ -1,4 +1,4 @@
-package pl.parser.nbp.validation;
+package pl.parser.nbp.service;
 
 import java.text.ParseException;
 import java.util.HashSet;
@@ -9,8 +9,6 @@ import org.junit.Test;
 
 import pl.parser.nbp.model.ExchangeRate;
 import pl.parser.nbp.model.ExchangeRateAggregate;
-import pl.parser.nbp.service.ExchangeRateCalculationService;
-import pl.parser.nbp.service.ExchangeRatesCacheService;
 
 import static org.junit.Assert.assertEquals;
 

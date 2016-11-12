@@ -122,14 +122,13 @@ public class UrlBuilderService {
 	private List<String> loadResourcesNames(LocalDate localStartDate, LocalDate localEndDate, LocalDate today)
 			throws IOException {
 		InputStream in = null;
-		List<String> recourcesNames = null;
+		List<String> recourcesNames = new ArrayList<>();
 		try {
 			int startYear = localStartDate.getYear();
 			int endYear = localEndDate.getYear();
 			int currentYear = today.getYear();
-			if (startYear != currentYear || endYear != currentYear) {
+			if (startYear != currentYear) {
 				if (startYear != endYear) {
-					recourcesNames = new ArrayList<>();
 					for (int i = 0; i <= endYear - startYear; i++) {
 						int countedYear = startYear + i;
 						URL url = new URL(

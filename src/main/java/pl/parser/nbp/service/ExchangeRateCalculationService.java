@@ -1,10 +1,16 @@
 package pl.parser.nbp.service;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.Locale;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 
+import pl.parser.nbp.exception.CalculationException;
 import pl.parser.nbp.model.ExchangeRate;
 import pl.parser.nbp.model.ExchangeRateAggregate;
 
@@ -15,11 +21,27 @@ import pl.parser.nbp.model.ExchangeRateAggregate;
  */
 public class ExchangeRateCalculationService {
 
+	private static final Logger LOGGER = Logger.getLogger(ExchangeRateCalculationService.class.getName());
+	/**
+	 * France has like Poland comma as decimal point
+	 */
+	private final NumberFormat format = NumberFormat.getInstance(Locale.FRANCE);
+
 	public ExchangeRateCalculationService() {
 
 	}
 
-	public double calculateAverageRates(@Nonnull String currencyCode, boolean isBuyingRate) {
+	public void calculate(@Nonnull String currencyCode) {
+		try {
+			calculateAverageRates(currencyCode, true);
+			calculateStandardDeviationForSellingRates(currencyCode);
+		} catch (ParseException e) {
+			LOGGER.log(Level.SEVERE, "Could not calculate needed values.");
+			throw new CalculationException(e);
+		}
+	}
+
+	private double calculateAverageRates(@Nonnull String currencyCode, boolean isBuyingRate) throws ParseException {
 		Set<ExchangeRateAggregate> exchangeRateAggregates = ExchangeRatesCacheService.getINSTANCE().getAllCache();
 		int numberOfRecords = 0;
 		double addedRates = 0;
@@ -29,19 +51,23 @@ public class ExchangeRateCalculationService {
 			numberOfRecords = numberOfRecords + exchangeRatesFiltered.size();
 			for (ExchangeRate exchangeRate : exchangeRatesFiltered) {
 				double rate;
+				Number number;
 				if (isBuyingRate) {
-					rate = Double.parseDouble(exchangeRate.getBuyingRate());
+					number = format.parse(exchangeRate.getBuyingRate());
+					rate = number.doubleValue();
 				} else {
-					rate = Double.parseDouble(exchangeRate.getSellingRate());
+					number = format.parse(exchangeRate.getSellingRate());
+					rate = number.doubleValue();
 				}
 				addedRates = addedRates + rate;
 			}
 		}
 		double calculatedAverageRate = addedRates / numberOfRecords;
+		LOGGER.log(Level.INFO, "Calculated average buying rate: {}", calculatedAverageRate);
 		return calculatedAverageRate;
 	}
 
-	public double calculateStandardDeviationForSellingRates(@Nonnull String currencyCode) {
+	private void calculateStandardDeviationForSellingRates(@Nonnull String currencyCode) throws ParseException {
 		Set<ExchangeRateAggregate> exchangeRateAggregates = ExchangeRatesCacheService.getINSTANCE().getAllCache();
 		double averageSellingRate = calculateAverageRates(currencyCode, false);
 		double numberOfRecords = 0;
@@ -50,15 +76,17 @@ public class ExchangeRateCalculationService {
 			Set<ExchangeRate> exchangeRates = exchangeRateAggregate.getExchangeRates();
 			Set<ExchangeRate> exchangeRatesFiltered = filterExchangeRateByCurrencyCode(exchangeRates, currencyCode);
 			numberOfRecords = numberOfRecords + exchangeRatesFiltered.size();
+			Number number;
 			for (ExchangeRate exchangeRate : exchangeRatesFiltered) {
-				double sellingRate = Double.parseDouble(exchangeRate.getSellingRate());
+				number = format.parse(exchangeRate.getSellingRate());
+				double sellingRate = number.doubleValue();
 				double sellingRateSubstracedByAverage = sellingRate - averageSellingRate;
 				numerator = numerator + Math.pow(sellingRateSubstracedByAverage, 2.0);
 			}
 		}
 		double fraction = numerator / (numberOfRecords - 1);
-		Double result = Math.pow(fraction, 0.5);
-		return result;
+		Double standardDeviationForSellingRates = Math.pow(fraction, 0.5);
+		LOGGER.log(Level.INFO, "Calculated standard deviation: {}", standardDeviationForSellingRates);
 	}
 
 	private Set<ExchangeRate> filterExchangeRateByCurrencyCode(Set<ExchangeRate> exchangeRates, String currencyCode) {

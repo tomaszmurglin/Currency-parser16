@@ -42,10 +42,14 @@ public class NbpClientService {
 	}
 
 	private void parseAndSaveExchangeRatesAggregates(String stringUrl) throws JAXBException, IOException {
-		JAXBContext jaxbContext = JAXBContext.newInstance(ExchangeRateAggregate.class);
-		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-		ExchangeRateAggregate exchangeRateAggregate = (ExchangeRateAggregate) jaxbUnmarshaller
-				.unmarshal(new URL(stringUrl).openStream());
-		ExchangeRatesCacheService.getINSTANCE().addToCache(exchangeRateAggregate);
+		try{
+			JAXBContext jaxbContext = JAXBContext.newInstance(ExchangeRateAggregate.class);
+			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+			ExchangeRateAggregate exchangeRateAggregate = (ExchangeRateAggregate) jaxbUnmarshaller
+					.unmarshal(new URL(stringUrl).openStream());
+			ExchangeRatesCacheService.getINSTANCE().addToCache(exchangeRateAggregate);
+		}catch (Exception e){
+			LOGGER.log(Level.SEVERE, ERROR_MSG);
+		}
 	}
 }

@@ -1,6 +1,5 @@
 package pl.parser.nbp;
 
-import java.math.BigDecimal;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,7 +24,7 @@ public class MainClass {
 		LOGGER.log(Level.INFO, "Execution started successfully");
 
 		//TODO delete below mock
-		args = new String[] {"EUR", "2004-03-01", "2012-04-01"};
+		args = new String[] { "EUR", "2004-03-01", "2012-04-01" };
 
 		StopWatch stopWatch = StopWatch.createStarted();
 		UserInputValidator userInputValidator = new UserInputValidator();
@@ -36,12 +35,8 @@ public class MainClass {
 		NbpClientService nbpClientService = new NbpClientService();
 		nbpClientService.loadData(startDate, endDate);
 		ExchangeRateCalculationService exchangeRateCalculationService = new ExchangeRateCalculationService();
-		double averageBuyingRate = exchangeRateCalculationService.calculateAverageRates(currencyCode, true);
-		double standardDeviationForSellingRates = exchangeRateCalculationService
-				.calculateStandardDeviationForSellingRates(currencyCode);
+		exchangeRateCalculationService.calculate(currencyCode);
 		stopWatch.stop();
 		LOGGER.log(Level.INFO, "Execution finished successfully. Elapsed time: {}", stopWatch.getTime(MILLISECONDS));
-		LOGGER.log(Level.INFO, "Calculated average buying rate: {}", averageBuyingRate);
-		LOGGER.log(Level.INFO, "Calculated standard deviation: {}", standardDeviationForSellingRates);
 	}
 }

@@ -18,7 +18,7 @@ public class ExchangeRatesCacheService {
 
 	public static ExchangeRatesCacheService getINSTANCE() {
 		if (INSTANCE == null) {
-			return new ExchangeRatesCacheService();
+			INSTANCE = new ExchangeRatesCacheService();
 		}
 		return INSTANCE;
 	}

@@ -1,17 +1,13 @@
 package pl.parser.nbp;
 
-import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.commons.lang3.time.StopWatch;
 
-import pl.parser.nbp.model.ExchangeRateAggregate;
 import pl.parser.nbp.service.ExchangeRateCalculationService;
 import pl.parser.nbp.service.NbpClientService;
-import pl.parser.nbp.service.UrlBuilderService;
 import pl.parser.nbp.validation.UserInputValidator;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
@@ -28,10 +24,10 @@ public class MainClass {
 	public static void main(String[] args) {
 		LOGGER.log(Level.INFO, "Execution started successfully");
 
-		//TODO delete
-		UrlBuilderService urlBuilderService = new UrlBuilderService();
-		urlBuilderService.buildURLs("2004-03-01", "2012-04-01");
-
+		//TODO delete below mock
+		args[0] = "EUR";
+		args[1] = "2004-03-01";
+		args[2] = "2012-04-01";
 
 		StopWatch stopWatch = StopWatch.createStarted();
 		UserInputValidator userInputValidator = new UserInputValidator();
@@ -42,8 +38,7 @@ public class MainClass {
 		NbpClientService nbpClientService = new NbpClientService();
 		nbpClientService.loadData(startDate, endDate);
 		ExchangeRateCalculationService exchangeRateCalculationService = new ExchangeRateCalculationService();
-		BigDecimal averageBuyingRate = exchangeRateCalculationService
-				.calculateAverageRates(currencyCode, true);
+		BigDecimal averageBuyingRate = exchangeRateCalculationService.calculateAverageRates(currencyCode, true);
 		BigDecimal standardDeviationForSellingRates = exchangeRateCalculationService
 				.calculateStandardDeviationForSellingRates(currencyCode);
 		stopWatch.stop();

@@ -41,7 +41,7 @@ public class ExchangeRateCalculationService {
 		}
 	}
 
-	private double calculateAverageRates(@Nonnull String currencyCode, boolean isBuyingRate) throws ParseException {
+	public double calculateAverageRates(@Nonnull String currencyCode, boolean isBuyingRate) throws ParseException {
 		Set<ExchangeRateAggregate> exchangeRateAggregates = ExchangeRatesCacheService.getINSTANCE().getAllCache();
 		int numberOfRecords = 0;
 		double addedRates = 0;
@@ -67,7 +67,7 @@ public class ExchangeRateCalculationService {
 		return calculatedAverageRate;
 	}
 
-	private void calculateStandardDeviationForSellingRates(@Nonnull String currencyCode) throws ParseException {
+	public double calculateStandardDeviationForSellingRates(@Nonnull String currencyCode) throws ParseException {
 		Set<ExchangeRateAggregate> exchangeRateAggregates = ExchangeRatesCacheService.getINSTANCE().getAllCache();
 		double averageSellingRate = calculateAverageRates(currencyCode, false);
 		double numberOfRecords = 0;
@@ -87,10 +87,11 @@ public class ExchangeRateCalculationService {
 		double fraction = numerator / (numberOfRecords - 1);
 		Double standardDeviationForSellingRates = Math.pow(fraction, 0.5);
 		LOGGER.log(Level.INFO, "Calculated standard deviation: " + standardDeviationForSellingRates);
+		return standardDeviationForSellingRates;
 	}
 
 	private Set<ExchangeRate> filterExchangeRateByCurrencyCode(Set<ExchangeRate> exchangeRates, String currencyCode) {
-		return exchangeRates.stream().filter(record -> !record.getCurrencyCode().equals(currencyCode))
+		return exchangeRates.stream().filter(record -> record.getCurrencyCode().equals(currencyCode))
 				.collect(Collectors.toSet());
 	}
 }

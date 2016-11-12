@@ -24,7 +24,7 @@ public class MainClass {
 		LOGGER.log(Level.INFO, "Execution started successfully");
 
 		//TODO delete below mock
-		args = new String[] { "EUR", "2004-03-01", "2012-04-01" };
+		args = new String[] { "EUR", "2013-01-28", "2013-01-31" };
 
 		StopWatch stopWatch = StopWatch.createStarted();
 		UserInputValidator userInputValidator = new UserInputValidator();

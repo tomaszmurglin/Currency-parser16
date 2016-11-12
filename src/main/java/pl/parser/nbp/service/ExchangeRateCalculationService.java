@@ -66,8 +66,7 @@ public class ExchangeRateCalculationService {
 			}
 		}
 		double calculatedAverageRate = addedRates / numberOfRecords;
-		df.format(calculatedAverageRate);
-		LOGGER.log(Level.INFO, "Calculated average buying rate: " + calculatedAverageRate);
+		LOGGER.log(Level.INFO, "Calculated average buying rate: " + df.format(calculatedAverageRate));
 		return calculatedAverageRate;
 	}
 
@@ -90,8 +89,7 @@ public class ExchangeRateCalculationService {
 		}
 		double fraction = numerator / (numberOfRecords - 1);
 		double standardDeviationForSellingRates = Math.pow(fraction, 0.5);
-		df.format(standardDeviationForSellingRates);
-		LOGGER.log(Level.INFO, "Calculated standard deviation: " + standardDeviationForSellingRates);
+		LOGGER.log(Level.INFO, "Calculated standard deviation: " + df.format(standardDeviationForSellingRates));
 		return standardDeviationForSellingRates;
 	}
 

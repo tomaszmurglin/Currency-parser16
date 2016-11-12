@@ -33,7 +33,7 @@ public class ExchangeRatesCacheService {
 
 	public synchronized void addToCache(ExchangeRateAggregate exchangeRateAggregate) {
 		exchangeRateAggregates.add(exchangeRateAggregate);
-		LOGGER.log(Level.INFO, "Added to cache: {}", exchangeRateAggregate.getClass().getName());
+		LOGGER.log(Level.INFO, "Added to cache: " + exchangeRateAggregate);
 	}
 
 	public synchronized Set<ExchangeRateAggregate> getAllCache() {
@@ -43,6 +43,6 @@ public class ExchangeRatesCacheService {
 
 	public synchronized void removeFromCache(ExchangeRate exchangeRate) {
 		exchangeRateAggregates.remove(exchangeRate);
-		LOGGER.log(Level.INFO, "Removed from cache: {}", exchangeRate.getClass().getName());
+		LOGGER.log(Level.INFO, "Removed from cache: " + exchangeRate);
 	}
 }

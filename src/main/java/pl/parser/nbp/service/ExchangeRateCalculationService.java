@@ -63,7 +63,7 @@ public class ExchangeRateCalculationService {
 			}
 		}
 		double calculatedAverageRate = addedRates / numberOfRecords;
-		LOGGER.log(Level.INFO, "Calculated average buying rate: {}", calculatedAverageRate);
+		LOGGER.log(Level.INFO, "Calculated average buying rate: " + calculatedAverageRate);
 		return calculatedAverageRate;
 	}
 
@@ -86,7 +86,7 @@ public class ExchangeRateCalculationService {
 		}
 		double fraction = numerator / (numberOfRecords - 1);
 		Double standardDeviationForSellingRates = Math.pow(fraction, 0.5);
-		LOGGER.log(Level.INFO, "Calculated standard deviation: {}", standardDeviationForSellingRates);
+		LOGGER.log(Level.INFO, "Calculated standard deviation: " + standardDeviationForSellingRates);
 	}
 
 	private Set<ExchangeRate> filterExchangeRateByCurrencyCode(Set<ExchangeRate> exchangeRates, String currencyCode) {

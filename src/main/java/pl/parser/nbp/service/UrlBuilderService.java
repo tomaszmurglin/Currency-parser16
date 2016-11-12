@@ -75,31 +75,45 @@ public class UrlBuilderService {
 			String endYearString = Integer.toString(localEndDate.getYear());
 			String twoLastNumbersOfEndYear = endYearString.substring(endYearString.length() - 2);
 			String dateFromResourceName = resourceName.substring(resourceName.length() - 6);
-			int monthAndDayNumberFromResourceName = Integer
-					.parseInt(dateFromResourceName.substring(dateFromResourceName.length() - 4));
+			String monthAndDayNumberFromResourceNameString = dateFromResourceName
+					.substring(dateFromResourceName.length() - 4);
+			int monthNumberFromResourceName = Integer.parseInt(monthAndDayNumberFromResourceNameString.substring(0, 2));
+			int dayNumberFromResourceName = Integer.parseInt(monthAndDayNumberFromResourceNameString
+					.substring(monthAndDayNumberFromResourceNameString.length() - 2));
 
 			String startDateMonth = Integer.toString(localStartDate.getMonthValue());
 			String startDateDay = Integer.toString(localStartDate.getDayOfMonth());
-			int monthAndDayNumberFromStartDate = Integer.parseInt(startDateMonth + startDateDay);
+			int monthNumberFromStartDate = Integer.parseInt(startDateMonth);
+			int dayNumberFromStartDate = Integer.parseInt(startDateDay);
 
 			String endDateMonth = Integer.toString(localEndDate.getMonthValue());
 			String endDateDay = Integer.toString(localEndDate.getDayOfMonth());
-			int monthAndDayNumberFromEndDate = Integer.parseInt(endDateMonth + endDateDay);
-
-			if (dateFromResourceName.startsWith(twoLastNumbersOfStartYear)
-					&& monthAndDayNumberFromResourceName < monthAndDayNumberFromStartDate) {
-				iterator.remove();
-			}
-			if (dateFromResourceName.startsWith(twoLastNumbersOfEndYear)
-					&& monthAndDayNumberFromResourceName > monthAndDayNumberFromEndDate) {
-				iterator.remove();
-			}
-			if (!resourceName.startsWith(TABLE_CODE)) {
-				try {
+			int monthNumberFromEndDate = Integer.parseInt(endDateMonth);
+			int dayNumberFromEndDate = Integer.parseInt(endDateDay);
+			try {
+				if (dateFromResourceName.startsWith(twoLastNumbersOfStartYear)
+						&& monthNumberFromResourceName < monthNumberFromStartDate) {
 					iterator.remove();
-				} catch (IllegalStateException e) {
-					continue;
 				}
+				if (dateFromResourceName.startsWith(twoLastNumbersOfStartYear)
+						&& monthNumberFromResourceName == monthNumberFromStartDate
+						&& dayNumberFromResourceName < dayNumberFromStartDate) {
+					iterator.remove();
+				}
+				if (dateFromResourceName.startsWith(twoLastNumbersOfEndYear)
+						&& monthNumberFromResourceName > monthNumberFromEndDate) {
+					iterator.remove();
+				}
+				if (dateFromResourceName.startsWith(twoLastNumbersOfEndYear)
+						&& monthNumberFromResourceName == monthNumberFromEndDate
+						&& dayNumberFromResourceName > dayNumberFromEndDate) {
+					iterator.remove();
+				}
+				if (!resourceName.startsWith(TABLE_CODE)) {
+					iterator.remove();
+				}
+			} catch (IllegalStateException e) {
+				continue;
 			}
 		}
 		return resourcesNames;

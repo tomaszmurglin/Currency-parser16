@@ -1,5 +1,5 @@
 package pl.parser.nbp.model;
 
-public enum CurrencyCode {
+public enum PermittedCurrencyCode {
 	USD, EUR, CHF, GBP
 }

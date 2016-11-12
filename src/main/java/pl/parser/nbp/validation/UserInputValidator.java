@@ -12,7 +12,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import pl.parser.nbp.exception.UserInputValidationException;
-import pl.parser.nbp.model.CurrencyCode;
+import pl.parser.nbp.model.PermittedCurrencyCode;
 
 /**
  * Validator for the user input
@@ -79,8 +79,8 @@ public class UserInputValidator {
 
 	private boolean isCurrencyCodeNotValid(@Nullable String currencyCode) {
 		List<String> currencyCodes = new ArrayList<>();
-		for (CurrencyCode element : CurrencyCode.values()) {
-			currencyCodes.add(element.toString().toLowerCase());
+		for (PermittedCurrencyCode permittedCurrencyCode : PermittedCurrencyCode.values()) {
+			currencyCodes.add(permittedCurrencyCode.toString().toLowerCase());
 		}
 		if (currencyCode == null || currencyCode.length() != LENGTH_OF_CURRENCY_CODE_BY_ISO_4217 || !currencyCodes
 				.contains(currencyCode.toLowerCase())) {

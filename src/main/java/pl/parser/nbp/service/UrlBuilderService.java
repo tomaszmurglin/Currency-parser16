@@ -33,10 +33,12 @@ public class UrlBuilderService {
 	private static final String PROTOCOL = "http://";
 	private static final String HOST = "www.nbp.pl/";
 	private static final String CATALOG = "kursy/xml/";
-	private static String RESOURCE_ADRESSES = "dir";
+	private static String RESOURCE_ADDRESSES = "dir";
 	private static final String FILE_EXTENSION = ".xml";
 	private static final String RESOURCE_EXTENSION = ".txt";
-	private static final String ERROR_MSG = "Could not receive data from the NBP web service";
+	private static final String ERROR_MSG_WS = "Could not receive data from the NBP web service. ";
+	private static final String ERROR_MSG_FILTERING =
+			"Could not filter this record cause it has been already " + "filtered. ";
 	private static final String DATE_PATTERN = "yyyy-MM-dd";
 	private static final String TABLE_CODE = "c";
 
@@ -60,7 +62,7 @@ public class UrlBuilderService {
 				urls.add(PROTOCOL + HOST + CATALOG + filteredResourceName + FILE_EXTENSION);
 			}
 		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, ERROR_MSG + e);
+			LOGGER.log(Level.SEVERE, ERROR_MSG_WS + e);
 			throw new DataLoadingException(e);
 		}
 		return urls;
@@ -113,7 +115,7 @@ public class UrlBuilderService {
 					iterator.remove();
 				}
 			} catch (IllegalStateException e) {
-				LOGGER.log(Level.SEVERE, ERROR_MSG + e);
+				LOGGER.log(Level.SEVERE, ERROR_MSG_FILTERING + e);
 			}
 		}
 		return resourcesNames;
@@ -131,17 +133,17 @@ public class UrlBuilderService {
 					for (int i = 0; i <= endYear - startYear; i++) {
 						int countedYear = startYear + i;
 						URL url = new URL(
-								PROTOCOL + HOST + CATALOG + RESOURCE_ADRESSES + countedYear + RESOURCE_EXTENSION);
+								PROTOCOL + HOST + CATALOG + RESOURCE_ADDRESSES + countedYear + RESOURCE_EXTENSION);
 						loadResourcesNamesAsStrings(url, recourcesNames);
 					}
 					return recourcesNames;
 				}
-				RESOURCE_ADRESSES = RESOURCE_ADRESSES + startYear;
+				RESOURCE_ADDRESSES = RESOURCE_ADDRESSES + startYear;
 			}
-			URL url = new URL(PROTOCOL + HOST + CATALOG + RESOURCE_ADRESSES + RESOURCE_EXTENSION);
+			URL url = new URL(PROTOCOL + HOST + CATALOG + RESOURCE_ADDRESSES + RESOURCE_EXTENSION);
 			loadResourcesNamesAsStrings(url, recourcesNames);
 		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, ERROR_MSG + e);
+			LOGGER.log(Level.SEVERE, ERROR_MSG_WS + e);
 			throw new DataLoadingException(e);
 		}
 		return recourcesNames;

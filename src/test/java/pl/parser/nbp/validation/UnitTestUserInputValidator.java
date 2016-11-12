@@ -4,8 +4,6 @@ import org.junit.Test;
 
 import pl.parser.nbp.exception.UserInputValidationException;
 
-import static org.junit.Assert.assertTrue;
-
 /**
  * JUnit test case for UserInputValidator.
  *
@@ -83,9 +81,8 @@ public class UnitTestUserInputValidator {
 		//GIVEN
 		String[] args = { "EUR", "1991-12-01", "1998-12-01" };
 		//WHEN
-		boolean result = testee.validate(args);
-		//THEN
-		assertTrue(result);
+		testee.validate(args);
+		//THEN no exception should be thrown
 	}
 
 	@Test(expected = UserInputValidationException.class)

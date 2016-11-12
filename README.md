@@ -8,4 +8,5 @@ author: tomasz.murglin@gmail.com
 *In the future test code coverage could be increased. For sure by integration tests which was skipped due to lack of time.*
 **Run all tests: mvn test**  
 **Build jar and run all tests: mvn package**  
-**Execute already packaged jar file: java -jar nbp-parser-archetype-1.0-SNAPSHOT.jar**
+**Execute already packaged jar file: java -jar nbp-parser-archetype-1.0-SNAPSHOT.jar**  
+**Note: in order to work with this tool you need to have stable internet connection !**

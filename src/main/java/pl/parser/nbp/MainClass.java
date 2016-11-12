@@ -1,5 +1,6 @@
 package pl.parser.nbp;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Set;
 import java.util.logging.Level;
@@ -10,6 +11,7 @@ import org.apache.commons.lang3.time.StopWatch;
 import pl.parser.nbp.model.ExchangeRateAggregate;
 import pl.parser.nbp.service.ExchangeRateCalculationService;
 import pl.parser.nbp.service.NbpClientService;
+import pl.parser.nbp.service.UrlBuilderService;
 import pl.parser.nbp.validation.UserInputValidator;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
@@ -25,6 +27,12 @@ public class MainClass {
 
 	public static void main(String[] args) {
 		LOGGER.log(Level.INFO, "Execution started successfully");
+
+		//TODO delete
+		UrlBuilderService urlBuilderService = new UrlBuilderService();
+		urlBuilderService.buildURLs("2004-03-01", "2012-04-01");
+
+
 		StopWatch stopWatch = StopWatch.createStarted();
 		UserInputValidator userInputValidator = new UserInputValidator();
 		userInputValidator.validate(args);
@@ -32,15 +40,14 @@ public class MainClass {
 		String startDate = args[1];
 		String endDate = args[2];
 		NbpClientService nbpClientService = new NbpClientService();
-		Set<ExchangeRateAggregate> exchangeRateAggregates = nbpClientService.loadData(startDate, endDate);
+		nbpClientService.loadData(startDate, endDate);
 		ExchangeRateCalculationService exchangeRateCalculationService = new ExchangeRateCalculationService();
 		BigDecimal averageBuyingRate = exchangeRateCalculationService
-				.calculateAverageRates(exchangeRateAggregates, currencyCode, true);
+				.calculateAverageRates(currencyCode, true);
 		BigDecimal standardDeviationForSellingRates = exchangeRateCalculationService
-				.calculateStandardDeviationForSellingRates(exchangeRateAggregates, currencyCode);
+				.calculateStandardDeviationForSellingRates(currencyCode);
 		stopWatch.stop();
-		LOGGER.log(Level.INFO, "Execution finished successfully. Elapsed time: {}",
-				stopWatch.getTime(MILLISECONDS));
+		LOGGER.log(Level.INFO, "Execution finished successfully. Elapsed time: {}", stopWatch.getTime(MILLISECONDS));
 		LOGGER.log(Level.INFO, "Calculated average buying rate: {}", averageBuyingRate);
 		LOGGER.log(Level.INFO, "Calculated standard deviation: {}", standardDeviationForSellingRates);
 	}

@@ -20,8 +20,8 @@ public class ExchangeRateCalculationService {
 
 	}
 
-	public BigDecimal calculateAverageRates(Set<ExchangeRateAggregate> exchangeRateAggregates,
-			@Nonnull String currencyCode, boolean isBuyingRate) {
+	public BigDecimal calculateAverageRates(@Nonnull String currencyCode, boolean isBuyingRate) {
+		Set<ExchangeRateAggregate> exchangeRateAggregates = ExchangeRatesCacheService.getINSTANCE().getAllCache();
 		BigDecimal numberOfRecords = BigDecimal.ZERO;
 		BigDecimal addedRates = BigDecimal.ZERO;
 		for (ExchangeRateAggregate exchangeRateAggregate : exchangeRateAggregates) {
@@ -42,9 +42,9 @@ public class ExchangeRateCalculationService {
 		return calculatedAverageRate;
 	}
 
-	public BigDecimal calculateStandardDeviationForSellingRates(Set<ExchangeRateAggregate> exchangeRateAggregates,
-			@Nonnull String currencyCode) {
-		BigDecimal averageSellingRate = calculateAverageRates(exchangeRateAggregates, currencyCode, false);
+	public BigDecimal calculateStandardDeviationForSellingRates(@Nonnull String currencyCode) {
+		Set<ExchangeRateAggregate> exchangeRateAggregates = ExchangeRatesCacheService.getINSTANCE().getAllCache();
+		BigDecimal averageSellingRate = calculateAverageRates(currencyCode, false);
 		BigDecimal numberOfRecords = BigDecimal.ZERO;
 		BigDecimal numerator = BigDecimal.ZERO;
 		for (ExchangeRateAggregate exchangeRateAggregate : exchangeRateAggregates) {

@@ -17,7 +17,7 @@ public class NbpClientService {
 
 	}
 
-	public Set<ExchangeRateAggregate> loadData(@Nonnull String startDate, @Nonnull String endDate) {
+	public void loadData(@Nonnull String startDate, @Nonnull String endDate) {
 		//		UrlBuilderService urlBuilderService = new UrlBuilderService();
 		//		Set<String> urls = urlBuilderService.buildURLs(startDate, endDate);
 		//		for (String stringUrl : urls) {
@@ -25,6 +25,6 @@ public class NbpClientService {
 		//			InputStream stream = url.openStream();
 		//			Document doc = docBuilder.parse(stream);
 		//		}
-		return null;
+		//TODO save data in the cache
 	}
 }

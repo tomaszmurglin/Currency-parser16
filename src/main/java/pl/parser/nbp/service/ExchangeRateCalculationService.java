@@ -12,6 +12,8 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
+
 import pl.parser.nbp.exception.CalculationException;
 import pl.parser.nbp.model.ExchangeRate;
 import pl.parser.nbp.model.ExchangeRateAggregate;
@@ -35,7 +37,7 @@ public class ExchangeRateCalculationService {
 
 	public void calculate(@Nonnull String currencyCode) {
 		try {
-			BigDecimal calculatedAverageBuyingRate = calculateAverageRates(currencyCode, true);
+			double calculatedAverageBuyingRate = calculateAverageRates(currencyCode, true);
 			LOGGER.log(Level.INFO, "Calculated average buying rate: " + calculatedAverageBuyingRate);
 			calculateStandardDeviationForSellingRates(currencyCode);
 		} catch (ParseException e) {
@@ -44,49 +46,34 @@ public class ExchangeRateCalculationService {
 		}
 	}
 
-	public BigDecimal calculateAverageRates(@Nonnull String currencyCode, boolean isBuyingRate) throws ParseException {
+	public double calculateAverageRates(@Nonnull String currencyCode, boolean isBuyingRate) throws ParseException {
 		Set<ExchangeRateAggregate> exchangeRateAggregates = ExchangeRatesCacheService.getInstance().getAllCache();
-		BigDecimal numberOfRecords = BigDecimal.ZERO;
-		BigDecimal addedRates = BigDecimal.ZERO;
+		DescriptiveStatistics descriptiveStatistics = new DescriptiveStatistics();
 		for (ExchangeRateAggregate exchangeRateAggregate : exchangeRateAggregates) {
 			Set<ExchangeRate> exchangeRates = exchangeRateAggregate.getExchangeRates();
 			Set<ExchangeRate> exchangeRatesFiltered = filterExchangeRateByCurrencyCode(exchangeRates, currencyCode);
-			numberOfRecords = numberOfRecords.add(new BigDecimal(exchangeRatesFiltered.size()));
 			for (ExchangeRate exchangeRate : exchangeRatesFiltered) {
-				BigDecimal rate;
-				Number number;
 				if (isBuyingRate) {
-					number = format.parse(exchangeRate.getBuyingRate());
-					rate = new BigDecimal(number.toString());
+					descriptiveStatistics.addValue(format.parse(exchangeRate.getBuyingRate()).doubleValue());
 				} else {
-					number = format.parse(exchangeRate.getSellingRate());
-					rate = new BigDecimal(number.toString());
+					descriptiveStatistics.addValue(format.parse(exchangeRate.getSellingRate()).doubleValue());
 				}
-				addedRates = addedRates.add(rate);
 			}
 		}
-		return addedRates.divide(numberOfRecords).setScale(4, RoundingMode.HALF_UP);
+		return BigDecimal.valueOf(descriptiveStatistics.getMean()).setScale(4, RoundingMode.HALF_UP).doubleValue();
 	}
 
 	public double calculateStandardDeviationForSellingRates(@Nonnull String currencyCode) throws ParseException {
 		Set<ExchangeRateAggregate> exchangeRateAggregates = ExchangeRatesCacheService.getInstance().getAllCache();
-		BigDecimal averageSellingRate = calculateAverageRates(currencyCode, false);
-		BigDecimal numberOfRecords = BigDecimal.ZERO;
-		BigDecimal numerator = BigDecimal.ZERO;
+		DescriptiveStatistics descriptiveStatistics = new DescriptiveStatistics();
 		for (ExchangeRateAggregate exchangeRateAggregate : exchangeRateAggregates) {
 			Set<ExchangeRate> exchangeRates = exchangeRateAggregate.getExchangeRates();
 			Set<ExchangeRate> exchangeRatesFiltered = filterExchangeRateByCurrencyCode(exchangeRates, currencyCode);
-			numberOfRecords = numberOfRecords.add(new BigDecimal(exchangeRatesFiltered.size()));
-			Number number;
 			for (ExchangeRate exchangeRate : exchangeRatesFiltered) {
-				number = format.parse(exchangeRate.getSellingRate());
-				BigDecimal sellingRate = new BigDecimal(number.toString());
-				double sellingRateSubtractedFromAverage = sellingRate.subtract(averageSellingRate).doubleValue();
-				numerator = numerator.add(new BigDecimal(Math.pow(sellingRateSubtractedFromAverage, 2.0)));
+				descriptiveStatistics.addValue(format.parse(exchangeRate.getSellingRate()).doubleValue());
 			}
 		}
-		double fraction = numerator.divide((numberOfRecords.subtract(BigDecimal.ONE))).doubleValue();
-		double standardDeviationForSellingRates = new BigDecimal(Math.pow(fraction, 0.5))
+		double standardDeviationForSellingRates = BigDecimal.valueOf(descriptiveStatistics.getStandardDeviation())
 				.setScale(4, RoundingMode.HALF_UP).doubleValue();
 		LOGGER.log(Level.INFO, "Calculated standard deviation for selling rates: " + standardDeviationForSellingRates);
 		return standardDeviationForSellingRates;

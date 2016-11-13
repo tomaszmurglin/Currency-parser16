@@ -1,6 +1,5 @@
 package pl.parser.nbp.service;
 
-import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.HashSet;
 import java.util.Set;
@@ -20,9 +19,9 @@ public class UnitTestExchangeRateCalculationService {
 	public void testCalculateAverageRates() throws ParseException {
 		//GIVEN @Before
 		//WHEN
-		BigDecimal calculatedAverageBuyingRate = testee.calculateAverageRates("EUR", true);
+		double calculatedAverageBuyingRate = testee.calculateAverageRates("EUR", true);
 		//THEN
-		assertEquals(new BigDecimal("2.0000"), calculatedAverageBuyingRate);
+		assertEquals(2d, calculatedAverageBuyingRate, 0);
 	}
 
 	@Test

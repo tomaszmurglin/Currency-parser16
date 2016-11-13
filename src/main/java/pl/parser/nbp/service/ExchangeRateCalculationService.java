@@ -35,7 +35,7 @@ public class ExchangeRateCalculationService {
 
 	public void calculate(@Nonnull String currencyCode) {
 		try {
-			double calculatedAverageBuyingRate = calculateAverageRates(currencyCode, true);
+			BigDecimal calculatedAverageBuyingRate = calculateAverageRates(currencyCode, true);
 			LOGGER.log(Level.INFO, "Calculated average buying rate: " + calculatedAverageBuyingRate);
 			calculateStandardDeviationForSellingRates(currencyCode);
 		} catch (ParseException e) {
@@ -44,48 +44,48 @@ public class ExchangeRateCalculationService {
 		}
 	}
 
-	public double calculateAverageRates(@Nonnull String currencyCode, boolean isBuyingRate) throws ParseException {
+	public BigDecimal calculateAverageRates(@Nonnull String currencyCode, boolean isBuyingRate) throws ParseException {
 		Set<ExchangeRateAggregate> exchangeRateAggregates = ExchangeRatesCacheService.getInstance().getAllCache();
-		int numberOfRecords = 0;
-		double addedRates = 0;
+		BigDecimal numberOfRecords = BigDecimal.ZERO;
+		BigDecimal addedRates = BigDecimal.ZERO;
 		for (ExchangeRateAggregate exchangeRateAggregate : exchangeRateAggregates) {
 			Set<ExchangeRate> exchangeRates = exchangeRateAggregate.getExchangeRates();
 			Set<ExchangeRate> exchangeRatesFiltered = filterExchangeRateByCurrencyCode(exchangeRates, currencyCode);
-			numberOfRecords = numberOfRecords + exchangeRatesFiltered.size();
+			numberOfRecords = numberOfRecords.add(new BigDecimal(exchangeRatesFiltered.size()));
 			for (ExchangeRate exchangeRate : exchangeRatesFiltered) {
-				double rate;
+				BigDecimal rate;
 				Number number;
 				if (isBuyingRate) {
 					number = format.parse(exchangeRate.getBuyingRate());
-					rate = number.doubleValue();
+					rate = new BigDecimal(number.toString());
 				} else {
 					number = format.parse(exchangeRate.getSellingRate());
-					rate = number.doubleValue();
+					rate = new BigDecimal(number.toString());
 				}
-				addedRates = addedRates + rate;
+				addedRates = addedRates.add(rate);
 			}
 		}
-		return new BigDecimal(addedRates / numberOfRecords).setScale(4, RoundingMode.HALF_UP).doubleValue();
+		return addedRates.divide(numberOfRecords).setScale(4, RoundingMode.HALF_UP);
 	}
 
 	public double calculateStandardDeviationForSellingRates(@Nonnull String currencyCode) throws ParseException {
 		Set<ExchangeRateAggregate> exchangeRateAggregates = ExchangeRatesCacheService.getInstance().getAllCache();
-		double averageSellingRate = calculateAverageRates(currencyCode, false);
-		double numberOfRecords = 0;
-		double numerator = 0;
+		BigDecimal averageSellingRate = calculateAverageRates(currencyCode, false);
+		BigDecimal numberOfRecords = BigDecimal.ZERO;
+		BigDecimal numerator = BigDecimal.ZERO;
 		for (ExchangeRateAggregate exchangeRateAggregate : exchangeRateAggregates) {
 			Set<ExchangeRate> exchangeRates = exchangeRateAggregate.getExchangeRates();
 			Set<ExchangeRate> exchangeRatesFiltered = filterExchangeRateByCurrencyCode(exchangeRates, currencyCode);
-			numberOfRecords = numberOfRecords + exchangeRatesFiltered.size();
+			numberOfRecords = numberOfRecords.add(new BigDecimal(exchangeRatesFiltered.size()));
 			Number number;
 			for (ExchangeRate exchangeRate : exchangeRatesFiltered) {
 				number = format.parse(exchangeRate.getSellingRate());
-				double sellingRate = number.doubleValue();
-				double sellingRateSubtractedFromAverage = sellingRate - averageSellingRate;
-				numerator = numerator + Math.pow(sellingRateSubtractedFromAverage, 2.0);
+				BigDecimal sellingRate = new BigDecimal(number.toString());
+				double sellingRateSubtractedFromAverage = sellingRate.subtract(averageSellingRate).doubleValue();
+				numerator = numerator.add(new BigDecimal(Math.pow(sellingRateSubtractedFromAverage, 2.0)));
 			}
 		}
-		double fraction = numerator / (numberOfRecords - 1);
+		double fraction = numerator.divide((numberOfRecords.subtract(BigDecimal.ONE))).doubleValue();
 		double standardDeviationForSellingRates = new BigDecimal(Math.pow(fraction, 0.5))
 				.setScale(4, RoundingMode.HALF_UP).doubleValue();
 		LOGGER.log(Level.INFO, "Calculated standard deviation for selling rates: " + standardDeviationForSellingRates);

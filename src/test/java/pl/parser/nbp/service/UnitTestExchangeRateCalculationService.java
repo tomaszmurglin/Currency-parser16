@@ -30,7 +30,7 @@ public class UnitTestExchangeRateCalculationService {
 		//WHEN
 		double standardDeviationForSellingRates = testee.calculateStandardDeviationForSellingRates("EUR");
 		//THEN
-		assertEquals(1.4142135623730951d, standardDeviationForSellingRates, 0);
+		assertEquals(1.4142, standardDeviationForSellingRates, 0);
 	}
 
 	@Before

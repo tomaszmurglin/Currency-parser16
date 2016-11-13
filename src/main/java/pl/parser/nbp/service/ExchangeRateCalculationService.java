@@ -36,7 +36,8 @@ public class ExchangeRateCalculationService {
 
 	public void calculate(@Nonnull String currencyCode) {
 		try {
-			calculateAverageRates(currencyCode, true);
+			double calculatedAverageBuyingRate = calculateAverageRates(currencyCode, true);
+			LOGGER.log(Level.INFO, "Calculated average buying rate: " + df.format(calculatedAverageBuyingRate));
 			calculateStandardDeviationForSellingRates(currencyCode);
 		} catch (ParseException e) {
 			LOGGER.log(Level.SEVERE, "Could not calculate needed values." + e);
@@ -65,9 +66,7 @@ public class ExchangeRateCalculationService {
 				addedRates = addedRates + rate;
 			}
 		}
-		double calculatedAverageRate = addedRates / numberOfRecords;
-		LOGGER.log(Level.INFO, "Calculated average buying rate: " + df.format(calculatedAverageRate));
-		return calculatedAverageRate;
+		return addedRates / numberOfRecords;
 	}
 
 	public double calculateStandardDeviationForSellingRates(@Nonnull String currencyCode) throws ParseException {

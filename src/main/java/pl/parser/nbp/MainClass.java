@@ -33,6 +33,7 @@ public class MainClass {
 		ExchangeRateCalculationService exchangeRateCalculationService = new ExchangeRateCalculationService();
 		exchangeRateCalculationService.calculate(currencyCode);
 		stopWatch.stop();
-		LOGGER.log(Level.INFO, "Execution finished successfully. Elapsed time: " + stopWatch.getTime(MILLISECONDS));
+		LOGGER.log(Level.INFO,
+				"Execution finished successfully. Elapsed time: " + stopWatch.getTime(MILLISECONDS) + " [ms]");
 	}
 }

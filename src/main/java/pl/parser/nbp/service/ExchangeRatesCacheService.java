@@ -5,7 +5,6 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import pl.parser.nbp.model.ExchangeRate;
 import pl.parser.nbp.model.ExchangeRateAggregate;
 
 public class ExchangeRatesCacheService {
@@ -26,23 +25,12 @@ public class ExchangeRatesCacheService {
 		return INSTANCE;
 	}
 
-	public synchronized void removeAllCache() {
-		exchangeRateAggregates.clear();
-		LOGGER.log(Level.INFO, "All cache has been removed.");
-	}
-
 	public synchronized void addToCache(ExchangeRateAggregate exchangeRateAggregate) {
 		exchangeRateAggregates.add(exchangeRateAggregate);
 		LOGGER.log(Level.INFO, "Added to cache: " + exchangeRateAggregate);
 	}
 
 	public synchronized Set<ExchangeRateAggregate> getAllCache() {
-		LOGGER.log(Level.INFO, "All cache has been fetched");
 		return exchangeRateAggregates;
-	}
-
-	public synchronized void removeFromCache(ExchangeRate exchangeRate) {
-		exchangeRateAggregates.remove(exchangeRate);
-		LOGGER.log(Level.INFO, "Removed from cache: " + exchangeRate);
 	}
 }

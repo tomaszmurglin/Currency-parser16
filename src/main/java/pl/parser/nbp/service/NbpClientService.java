@@ -10,11 +10,13 @@ import javax.annotation.Nonnull;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.Source;
 import javax.xml.transform.sax.SAXSource;
 
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 import pl.parser.nbp.exception.DataLoadingException;
 import pl.parser.nbp.model.ExchangeRateAggregate;
@@ -46,20 +48,17 @@ public class NbpClientService {
 		}
 	}
 
-	private void parseAndSaveExchangeRatesAggregates(String stringUrl) throws JAXBException, IOException {
-		try {
-			SAXParserFactory spf = SAXParserFactory.newInstance();
-			spf.setFeature("http://xml.org/sax/features/external-general-entities", false);
-			spf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
-			spf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
-			Source xmlSource = new SAXSource(spf.newSAXParser().getXMLReader(),
-					new InputSource(new URL(stringUrl).openStream()));
-			JAXBContext jc = JAXBContext.newInstance(ExchangeRateAggregate.class);
-			Unmarshaller um = jc.createUnmarshaller();
-			ExchangeRateAggregate exchangeRateAggregate = (ExchangeRateAggregate) um.unmarshal(xmlSource);
-			ExchangeRatesCacheService.getInstance().addToCache(exchangeRateAggregate);
-		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, ERROR_MSG + e);
-		}
+	private void parseAndSaveExchangeRatesAggregates(String stringUrl)
+			throws JAXBException, IOException, SAXException, ParserConfigurationException {
+		SAXParserFactory spf = SAXParserFactory.newInstance();
+		spf.setFeature("http://xml.org/sax/features/external-general-entities", false);
+		spf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+		spf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+		Source xmlSource = new SAXSource(spf.newSAXParser().getXMLReader(),
+				new InputSource(new URL(stringUrl).openStream()));
+		JAXBContext jc = JAXBContext.newInstance(ExchangeRateAggregate.class);
+		Unmarshaller um = jc.createUnmarshaller();
+		ExchangeRateAggregate exchangeRateAggregate = (ExchangeRateAggregate) um.unmarshal(xmlSource);
+		ExchangeRatesCacheService.getInstance().addToCache(exchangeRateAggregate);
 	}
 }

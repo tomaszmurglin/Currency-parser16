@@ -39,6 +39,7 @@ public class UrlBuilderService {
 	private static final String ERROR_MSG_WS = "Could not receive data from the NBP web service. ";
 	private static final String DATE_PATTERN = "yyyy-MM-dd";
 	private static final String TABLE_CODE = "c";
+	private static final String NO_DATA_ERROR = "There is no data provided for given time period and currency code.";
 
 	public UrlBuilderService() {
 
@@ -115,6 +116,10 @@ public class UrlBuilderService {
 					&& dayNumberFromResourceName > dayNumberFromEndDate) {
 				iterator.remove();
 			}
+		}
+		if (resourcesNames.isEmpty()) {
+			LOGGER.log(Level.SEVERE, NO_DATA_ERROR);
+			throw new DataLoadingException(NO_DATA_ERROR);
 		}
 		return resourcesNames;
 	}

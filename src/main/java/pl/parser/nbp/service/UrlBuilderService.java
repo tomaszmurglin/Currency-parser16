@@ -71,28 +71,32 @@ public class UrlBuilderService {
 	private List<String> filterResourcesNames(LocalDate localStartDate, LocalDate localEndDate,
 			List<String> resourcesNames) {
 		for (Iterator<String> iterator = resourcesNames.iterator(); iterator.hasNext(); ) {
-			String resourceName = iterator.next();
-			String startYearString = Integer.toString(localStartDate.getYear());
-			String twoLastNumbersOfStartYear = startYearString.substring(startYearString.length() - 2);
-			String endYearString = Integer.toString(localEndDate.getYear());
-			String twoLastNumbersOfEndYear = endYearString.substring(endYearString.length() - 2);
-			String dateFromResourceName = resourceName.substring(resourceName.length() - 6);
-			String monthAndDayNumberFromResourceNameString = dateFromResourceName
-					.substring(dateFromResourceName.length() - 4);
-			int monthNumberFromResourceName = Integer.parseInt(monthAndDayNumberFromResourceNameString.substring(0, 2));
-			int dayNumberFromResourceName = Integer.parseInt(monthAndDayNumberFromResourceNameString
-					.substring(monthAndDayNumberFromResourceNameString.length() - 2));
-
-			String startDateMonth = Integer.toString(localStartDate.getMonthValue());
-			String startDateDay = Integer.toString(localStartDate.getDayOfMonth());
-			int monthNumberFromStartDate = Integer.parseInt(startDateMonth);
-			int dayNumberFromStartDate = Integer.parseInt(startDateDay);
-
-			String endDateMonth = Integer.toString(localEndDate.getMonthValue());
-			String endDateDay = Integer.toString(localEndDate.getDayOfMonth());
-			int monthNumberFromEndDate = Integer.parseInt(endDateMonth);
-			int dayNumberFromEndDate = Integer.parseInt(endDateDay);
 			try {
+				String resourceName = iterator.next();
+				if (!resourceName.startsWith(TABLE_CODE)) {
+					iterator.remove();
+					continue;
+				}
+				String startYearString = Integer.toString(localStartDate.getYear());
+				String twoLastNumbersOfStartYear = startYearString.substring(startYearString.length() - 2);
+				String endYearString = Integer.toString(localEndDate.getYear());
+				String twoLastNumbersOfEndYear = endYearString.substring(endYearString.length() - 2);
+				String dateFromResourceName = resourceName.substring(resourceName.length() - 6);
+				String monthAndDayNumberFromResourceNameString = dateFromResourceName
+						.substring(dateFromResourceName.length() - 4);
+				int monthNumberFromResourceName = Integer.parseInt(monthAndDayNumberFromResourceNameString.substring(0, 2));
+				int dayNumberFromResourceName = Integer.parseInt(monthAndDayNumberFromResourceNameString
+						.substring(monthAndDayNumberFromResourceNameString.length() - 2));
+
+				String startDateMonth = Integer.toString(localStartDate.getMonthValue());
+				String startDateDay = Integer.toString(localStartDate.getDayOfMonth());
+				int monthNumberFromStartDate = Integer.parseInt(startDateMonth);
+				int dayNumberFromStartDate = Integer.parseInt(startDateDay);
+
+				String endDateMonth = Integer.toString(localEndDate.getMonthValue());
+				String endDateDay = Integer.toString(localEndDate.getDayOfMonth());
+				int monthNumberFromEndDate = Integer.parseInt(endDateMonth);
+				int dayNumberFromEndDate = Integer.parseInt(endDateDay);
 				if (dateFromResourceName.startsWith(twoLastNumbersOfStartYear)
 						&& monthNumberFromResourceName < monthNumberFromStartDate) {
 					iterator.remove();
@@ -112,10 +116,6 @@ public class UrlBuilderService {
 				if (dateFromResourceName.startsWith(twoLastNumbersOfEndYear)
 						&& monthNumberFromResourceName == monthNumberFromEndDate
 						&& dayNumberFromResourceName > dayNumberFromEndDate) {
-					iterator.remove();
-					continue;
-				}
-				if (!resourceName.startsWith(TABLE_CODE)) {
 					iterator.remove();
 				}
 			} catch (IllegalStateException e) {

@@ -1,5 +1,7 @@
 package pl.parser.nbp.service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -66,7 +68,7 @@ public class ExchangeRateCalculationService {
 				addedRates = addedRates + rate;
 			}
 		}
-		return addedRates / numberOfRecords;
+		return new BigDecimal(addedRates / numberOfRecords).setScale(4, RoundingMode.HALF_UP).doubleValue();
 	}
 
 	public double calculateStandardDeviationForSellingRates(@Nonnull String currencyCode) throws ParseException {
@@ -90,7 +92,7 @@ public class ExchangeRateCalculationService {
 		double standardDeviationForSellingRates = Math.pow(fraction, 0.5);
 		LOGGER.log(Level.INFO,
 				"Calculated standard deviation for selling rates: " + df.format(standardDeviationForSellingRates));
-		return standardDeviationForSellingRates;
+		return new BigDecimal(standardDeviationForSellingRates).setScale(4, RoundingMode.HALF_UP).doubleValue();
 	}
 
 	private Set<ExchangeRate> filterExchangeRateByCurrencyCode(Set<ExchangeRate> exchangeRates, String currencyCode) {

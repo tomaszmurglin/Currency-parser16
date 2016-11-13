@@ -37,8 +37,7 @@ public class ExchangeRateCalculationService {
 
 	public void calculate(@Nonnull String currencyCode) {
 		try {
-			double calculatedAverageBuyingRate = calculateAverageRates(currencyCode, true);
-			LOGGER.log(Level.INFO, "Calculated average buying rate: " + calculatedAverageBuyingRate);
+			calculateAverageArithmeticBuyingRate(currencyCode);
 			calculateStandardDeviationForSellingRates(currencyCode);
 		} catch (ParseException e) {
 			LOGGER.log(Level.SEVERE, "Could not calculate needed values." + e);
@@ -46,21 +45,20 @@ public class ExchangeRateCalculationService {
 		}
 	}
 
-	public double calculateAverageRates(@Nonnull String currencyCode, boolean isBuyingRate) throws ParseException {
+	public double calculateAverageArithmeticBuyingRate(@Nonnull String currencyCode) throws ParseException {
 		Set<ExchangeRateAggregate> exchangeRateAggregates = ExchangeRatesCacheService.getInstance().getAllCache();
 		DescriptiveStatistics descriptiveStatistics = new DescriptiveStatistics();
 		for (ExchangeRateAggregate exchangeRateAggregate : exchangeRateAggregates) {
 			Set<ExchangeRate> exchangeRates = exchangeRateAggregate.getExchangeRates();
 			Set<ExchangeRate> exchangeRatesFiltered = filterExchangeRateByCurrencyCode(exchangeRates, currencyCode);
 			for (ExchangeRate exchangeRate : exchangeRatesFiltered) {
-				if (isBuyingRate) {
-					descriptiveStatistics.addValue(format.parse(exchangeRate.getBuyingRate()).doubleValue());
-				} else {
-					descriptiveStatistics.addValue(format.parse(exchangeRate.getSellingRate()).doubleValue());
-				}
+				descriptiveStatistics.addValue(format.parse(exchangeRate.getBuyingRate()).doubleValue());
 			}
 		}
-		return BigDecimal.valueOf(descriptiveStatistics.getMean()).setScale(4, RoundingMode.HALF_UP).doubleValue();
+		double calculatedAverageBuyingRate = BigDecimal.valueOf(descriptiveStatistics.getMean())
+				.setScale(4, RoundingMode.HALF_UP).doubleValue();
+		LOGGER.log(Level.INFO, "Calculated average buying rate: " + calculatedAverageBuyingRate);
+		return calculatedAverageBuyingRate;
 	}
 
 	public double calculateStandardDeviationForSellingRates(@Nonnull String currencyCode) throws ParseException {

@@ -19,7 +19,7 @@ public class UnitTestExchangeRateCalculationService {
 	public void testCalculateAverageRates() throws ParseException {
 		//GIVEN @Before
 		//WHEN
-		double calculatedAverageBuyingRate = testee.calculateAverageRates("EUR", true);
+		double calculatedAverageBuyingRate = testee.calculateAverageArithmeticBuyingRate("EUR");
 		//THEN
 		assertEquals(2d, calculatedAverageBuyingRate, 0);
 	}

@@ -96,20 +96,24 @@ public class UrlBuilderService {
 				if (dateFromResourceName.startsWith(twoLastNumbersOfStartYear)
 						&& monthNumberFromResourceName < monthNumberFromStartDate) {
 					iterator.remove();
+					continue;
 				}
 				if (dateFromResourceName.startsWith(twoLastNumbersOfStartYear)
 						&& monthNumberFromResourceName == monthNumberFromStartDate
 						&& dayNumberFromResourceName < dayNumberFromStartDate) {
 					iterator.remove();
+					continue;
 				}
 				if (dateFromResourceName.startsWith(twoLastNumbersOfEndYear)
 						&& monthNumberFromResourceName > monthNumberFromEndDate) {
 					iterator.remove();
+					continue;
 				}
 				if (dateFromResourceName.startsWith(twoLastNumbersOfEndYear)
 						&& monthNumberFromResourceName == monthNumberFromEndDate
 						&& dayNumberFromResourceName > dayNumberFromEndDate) {
 					iterator.remove();
+					continue;
 				}
 				if (!resourceName.startsWith(TABLE_CODE)) {
 					iterator.remove();

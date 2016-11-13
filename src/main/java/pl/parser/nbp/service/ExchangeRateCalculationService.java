@@ -89,7 +89,7 @@ public class ExchangeRateCalculationService {
 		double fraction = numerator / (numberOfRecords - 1);
 		double standardDeviationForSellingRates = Math.pow(fraction, 0.5);
 		LOGGER.log(Level.INFO,
-				"Calculated standard deviation for the selling rates: " + df.format(standardDeviationForSellingRates));
+				"Calculated standard deviation for selling rates: " + df.format(standardDeviationForSellingRates));
 		return standardDeviationForSellingRates;
 	}
 

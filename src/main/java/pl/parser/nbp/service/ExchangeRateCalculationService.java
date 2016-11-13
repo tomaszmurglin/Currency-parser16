@@ -2,7 +2,6 @@ package pl.parser.nbp.service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
@@ -30,8 +29,6 @@ public class ExchangeRateCalculationService {
 	 */
 	private final NumberFormat format = NumberFormat.getInstance(Locale.FRANCE);
 
-	DecimalFormat df = new DecimalFormat("#.####");
-
 	public ExchangeRateCalculationService() {
 
 	}
@@ -39,7 +36,7 @@ public class ExchangeRateCalculationService {
 	public void calculate(@Nonnull String currencyCode) {
 		try {
 			double calculatedAverageBuyingRate = calculateAverageRates(currencyCode, true);
-			LOGGER.log(Level.INFO, "Calculated average buying rate: " + df.format(calculatedAverageBuyingRate));
+			LOGGER.log(Level.INFO, "Calculated average buying rate: " + calculatedAverageBuyingRate);
 			calculateStandardDeviationForSellingRates(currencyCode);
 		} catch (ParseException e) {
 			LOGGER.log(Level.SEVERE, "Could not calculate needed values." + e);
@@ -89,10 +86,10 @@ public class ExchangeRateCalculationService {
 			}
 		}
 		double fraction = numerator / (numberOfRecords - 1);
-		double standardDeviationForSellingRates = Math.pow(fraction, 0.5);
-		LOGGER.log(Level.INFO,
-				"Calculated standard deviation for selling rates: " + df.format(standardDeviationForSellingRates));
-		return new BigDecimal(standardDeviationForSellingRates).setScale(4, RoundingMode.HALF_UP).doubleValue();
+		double standardDeviationForSellingRates = new BigDecimal(Math.pow(fraction, 0.5))
+				.setScale(4, RoundingMode.HALF_UP).doubleValue();
+		LOGGER.log(Level.INFO, "Calculated standard deviation for selling rates: " + standardDeviationForSellingRates);
+		return standardDeviationForSellingRates;
 	}
 
 	private Set<ExchangeRate> filterExchangeRateByCurrencyCode(Set<ExchangeRate> exchangeRates, String currencyCode) {

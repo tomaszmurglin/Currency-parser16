@@ -123,7 +123,7 @@ public class UrlBuilderService {
 
 	private List<String> loadResourcesNames(LocalDate localStartDate, LocalDate localEndDate, LocalDate today)
 			throws IOException {
-		List<String> recourcesNames = new ArrayList<>();
+		List<String> resourcesNames = new ArrayList<>();
 		try {
 			int startYear = localStartDate.getYear();
 			int endYear = localEndDate.getYear();
@@ -134,19 +134,19 @@ public class UrlBuilderService {
 						int countedYear = startYear + i;
 						URL url = new URL(
 								PROTOCOL + HOST + CATALOG + RESOURCE_ADDRESSES + countedYear + RESOURCE_EXTENSION);
-						loadResourcesNamesAsStrings(url, recourcesNames);
+						loadResourcesNamesAsStrings(url, resourcesNames);
 					}
-					return recourcesNames;
+					return resourcesNames;
 				}
 				RESOURCE_ADDRESSES = RESOURCE_ADDRESSES + startYear;
 			}
 			URL url = new URL(PROTOCOL + HOST + CATALOG + RESOURCE_ADDRESSES + RESOURCE_EXTENSION);
-			loadResourcesNamesAsStrings(url, recourcesNames);
+			loadResourcesNamesAsStrings(url, resourcesNames);
 		} catch (Exception e) {
 			LOGGER.log(Level.SEVERE, ERROR_MSG_WS + e);
 			throw new DataLoadingException(e);
 		}
-		return recourcesNames;
+		return resourcesNames;
 	}
 
 	private void loadResourcesNamesAsStrings(URL url, List<String> recourcesNames) throws IOException {

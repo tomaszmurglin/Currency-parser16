@@ -25,7 +25,7 @@ public class ExchangeRatesCacheService {
 		return INSTANCE;
 	}
 
-	public synchronized void addToCache(ExchangeRateAggregate exchangeRateAggregate) {
+	public synchronized void add(ExchangeRateAggregate exchangeRateAggregate) {
 		exchangeRateAggregates.add(exchangeRateAggregate);
 		LOGGER.log(Level.INFO, "Added to cache: " + exchangeRateAggregate);
 	}

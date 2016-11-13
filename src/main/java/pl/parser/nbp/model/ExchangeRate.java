@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * Represents the exchange rate xml node
@@ -18,10 +19,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class ExchangeRate implements Serializable {
 	private static final long serialVersionUID = 8935018683817780295L;
 
-	@XmlElement(name = "nazwa_waluty")
+	@XmlTransient
 	private String currencyName;
 
-	@XmlElement(name = "przelicznik")
+	@XmlTransient
 	private int currencyConverter;
 
 	/**
@@ -33,19 +34,20 @@ public class ExchangeRate implements Serializable {
 	@XmlElement(name = "kurs_kupna")
 	private String buyingRate;
 
-	public String getBuyingRate() {
-		return buyingRate;
-	}
-
-	public String getSellingRate() {
-		return sellingRate;
-	}
 
 	@XmlElement(name = "kurs_sprzedazy")
 	private String sellingRate;
 
 	public ExchangeRate() {
 
+	}
+
+	public String getBuyingRate() {
+		return buyingRate;
+	}
+
+	public String getSellingRate() {
+		return sellingRate;
 	}
 
 	public String getCurrencyName() {

@@ -28,9 +28,11 @@ public class UserInputValidator {
 	private static final int LENGTH_OF_CURRENCY_CODE_BY_ISO_4217 = 3;
 	private static final String ERROR_MSG = "Not valid input has been provided. ";
 	private static final String VALID_MSG = "User input is valid. ";
-	private static final String CORRECT_INPUT_MSG = "Please make sure your input is correct and try again. Correct "
-			+ "input is: [currency_code in ISO_4217 format] [start_date yyyy-MM-dd] [end_date yyyy-MM-dd] e.g. EUR 2013-01-28 "
-			+ "2013-01-31";
+	private static final String CORRECT_INPUT_MSG =
+			"Please make sure your start date is not the same as the end date " + "and "
+					+ "input is correct and try again. Correct "
+					+ "input is: [currency_code in ISO_4217 format] [start_date yyyy-MM-dd] [end_date yyyy-MM-dd] e.g. EUR 2013-01-28 "
+					+ "2013-01-31 ";
 
 	public UserInputValidator() {
 

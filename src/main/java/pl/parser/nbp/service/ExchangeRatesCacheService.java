@@ -16,12 +16,14 @@ public class ExchangeRatesCacheService {
 
 	}
 
-	private static ExchangeRatesCacheService INSTANCE;
+	private static volatile ExchangeRatesCacheService INSTANCE;
 
 	public static ExchangeRatesCacheService getInstance() {
 		if (INSTANCE == null) {
+                   synchronized (ExchangeRatesCacheService.class) {
 			INSTANCE = new ExchangeRatesCacheService();
-		}
+		  } 
+                }
 		return INSTANCE;
 	}
 

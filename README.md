@@ -1,3 +1,7 @@
+<p align="left">
+<a href="https://en.m.wikipedia.org/wiki/Command-line_interface"><img src="https://img.shields.io/badge/interface-CLI-brightgreen.svg?longCache=true&style=flat-square"></a>
+</p>
+
 Currency parser 16
 ==============
 
